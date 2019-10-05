@@ -30,7 +30,7 @@ public class DoublyLinkedList<E> implements ListInterface<E> {
 
     @Override
     public void removeLast() {
-        if(this.isEmpty()){
+        if (this.isEmpty()) {
             throw new NoSuchElementException();
         }
         Node secondLastNode = this.LAST.getPredecessor().getPredecessor();
@@ -41,7 +41,7 @@ public class DoublyLinkedList<E> implements ListInterface<E> {
 
     @Override
     public void removeFirst() {
-        if(this.isEmpty()){
+        if (this.isEmpty()) {
             throw new NoSuchElementException();
         }
         Node secondNode = this.FIRST.getSuccessor().getSuccessor();
@@ -53,7 +53,7 @@ public class DoublyLinkedList<E> implements ListInterface<E> {
     @Override
     public void deleteAtPosition(int index) {
         Node currentNode = this.FIRST.getSuccessor();
-        while(index > 0){
+        while (index > 0) {
             currentNode = currentNode.getSuccessor();
             index--;
         }
@@ -65,19 +65,34 @@ public class DoublyLinkedList<E> implements ListInterface<E> {
     }
 
     @Override
-    public void insertAtPosition(int i, E item) {
-        //TODO
+    public void insertAtPosition(int index, E item) {
+        Node nodeToInsert = new Node(item);
+        Node currentNode = this.FIRST.getSuccessor();
+        while (index > 0) {
+            currentNode = currentNode.getSuccessor();
+            index--;
+        }
+        Node predecessorCurrentNode = currentNode.getPredecessor();
+        predecessorCurrentNode.setSuccessor(nodeToInsert);
+        currentNode.setPredecessor(nodeToInsert);
+        nodeToInsert.setPredecessor(predecessorCurrentNode);
+        nodeToInsert.setSuccessor(currentNode);
+        this.size++;
     }
 
     @Override
-    public E retrieve(int i) {
-        //TODO
-        return null;
+    public E retrieve(int index) {
+        Node currentNode = this.FIRST.getSuccessor();
+        while (index > 0) {
+            currentNode = currentNode.getSuccessor();
+            index--;
+        }
+        return (E)currentNode.getValue();
     }
 
     @Override
     public int size() {
-        return size;
+        return this.size;
     }
 
     @Override
@@ -87,7 +102,14 @@ public class DoublyLinkedList<E> implements ListInterface<E> {
 
     @Override
     public boolean contains(Object o) {
-        return false;
+        boolean contains = false;
+        for (E element : this) {
+            if (element == o) {
+                contains = true;
+                break;
+            }
+        }
+        return contains;
     }
 
     @Override
@@ -218,6 +240,7 @@ public class DoublyLinkedList<E> implements ListInterface<E> {
 
             private int currentIndex = 0;
             private Node currentNode = FIRST.getSuccessor();
+
             @Override
             public boolean hasNext() {
                 return currentIndex < size;
