@@ -1,16 +1,16 @@
-public class Node {
+public class Node<E> {
 
     private Node predecessor;
     private Node successor;
-    private Object value;
+    private E value;
 
-    public Node(Object value) {
+    public Node(E value) {
         this.value = value;
     }
 
     public Node() {}
 
-    public Object getValue() {
+    public E getValue() {
         return value;
     }
 
