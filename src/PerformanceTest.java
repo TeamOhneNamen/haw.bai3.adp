@@ -2,12 +2,19 @@ import util.Stopwatch;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class PerformanceTest {
 
-    public static final String INSERT = "insert";
+    private static final String INSERT = "insert";
+    private static final String DELETE_AT_POSITION = "deleteAtPosition";
+    private static final String REMOVE_ELEMENT = "remove";
+    private static final String CONTAINS = "contains";
+
+    private static final String ELEMENT = "asdf";
+    private static final int LIST_SIZE = 400000;
+    private static final int TIMES = 500;
+    private static final int EXPERIMENTS = 10;
+    private static final int POSITION = LIST_SIZE;
 
     public static void main(String [] args) {
         String method;
@@ -22,38 +29,41 @@ public class PerformanceTest {
             experiments = Integer.valueOf(args[1]);
         }else {
             method = INSERT;
-            listSize = 400000;
-            times = 2;
-            experiments = 10;
+            listSize = LIST_SIZE;
+            times = TIMES;
+            experiments = EXPERIMENTS;
         }
 
-        printTableHead(method, listSize, times, experiments);
-        switch(method){
-            case INSERT:
-                PerformanceTest.insertAtPositionPerformanceTest(listSize, Integer.valueOf(times), Integer.valueOf(experiments));
-                break;
-            default:
-                System.err.println(method + "is not a valid value");
-        }
-    }
+        System.out.println(method+" "+times+"-mal,\t"+"Listenlaenge="+listSize+", "+"\tAnzahl Exp="+experiments);
+        System.out.println("WDH "+"Zeit(ms) "+"Zeit/repOp(ms)");
 
-    private static void insertAtPositionPerformanceTest(int listSize, int times, int experiments) {
         ArrayList<Integer> arr=new ArrayList<Integer>(Collections.nCopies(listSize, 0));
-        int position = 0;
         for(int count = 0; count < experiments ; count++) {
-            DoublyLinkedList emptyDoublyLinkedList = new DoublyLinkedList();
+            DoublyLinkedList doublyLinkedList = new DoublyLinkedList(arr);
             Stopwatch stopwatch = new Stopwatch();
             for(int innerCount = 0; innerCount < times ; innerCount++) {
-                arr.forEach(element -> emptyDoublyLinkedList.insertAtPosition(position, element));
+                switch(method){
+                    case INSERT:
+                        doublyLinkedList.insertAtPosition(POSITION, ELEMENT);
+                        break;
+                    case DELETE_AT_POSITION:
+                        doublyLinkedList.deleteAtPosition(POSITION);
+                        break;
+                    case REMOVE_ELEMENT:
+                        doublyLinkedList.remove(ELEMENT);
+                        break;
+                    case CONTAINS:
+                        doublyLinkedList.contains(ELEMENT);
+                        break;
+                    default:
+                        System.err.println(method + "is not a valid value");
+                }
+
             }
+
             double elapsedTime = stopwatch.elapsedTime();
             double rate = elapsedTime / times;
             System.out.println(times+"\t"+elapsedTime+"\t"+rate);
         }
-
     }
-
-    private static void printTableHead(String method, int listSize, int times, int experiments) {
-        System.out.println(method+" "+times+"-mal,\t"+"Listenlaenge="+listSize+", "+"\tAnzahl Exp="+experiments);
-        System.out.println("WDH "+"Zeit(ms) "+"Zeit/repOp(ms)");}
 }
