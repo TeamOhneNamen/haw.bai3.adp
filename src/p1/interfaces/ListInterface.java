@@ -1,8 +1,6 @@
-package interfaces;
+package p1.interfaces;
 
-import java.util.Collection;
-
-public interface ListInterface<E> extends Collection<E>, Iterable<E> {
+public interface ListInterface<E> extends Iterable<E> {
     /*delete last element*/
     void removeLast();
 

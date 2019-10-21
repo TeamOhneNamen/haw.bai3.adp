@@ -1,7 +1,9 @@
+package p1.datastructures;
+
 public class Node<E> {
 
-    private Node predecessor;
-    private Node successor;
+    private Node<E> predecessor;
+    private Node<E> successor;
     private E value;
 
     public Node(E value) {
@@ -14,19 +16,19 @@ public class Node<E> {
         return value;
     }
 
-    public Node getPredecessor() {
+    public Node<E> getPredecessor() {
         return predecessor;
     }
 
-    public void setPredecessor(Node predecessor) {
+    public void setPredecessor(Node<E> predecessor) {
         this.predecessor = predecessor;
     }
 
-    public Node getSuccessor() {
+    public Node<E> getSuccessor() {
         return successor;
     }
 
-    public void setSuccessor(Node successor) {
+    public void setSuccessor(Node<E> successor) {
         this.successor = successor;
     }
 }

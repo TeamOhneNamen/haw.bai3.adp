@@ -1,4 +1,7 @@
-import util.Stopwatch;
+package p1.test;
+
+import p1.datastructures.DoublyLinkedList;
+import p1.util.Stopwatch;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,7 +40,7 @@ public class PerformanceTest {
         System.out.println(method+" "+times+"-mal,\t"+"Listenlaenge="+listSize+", "+"\tAnzahl Exp="+experiments);
         System.out.println("WDH "+"Zeit(ms) "+"Zeit/repOp(ms)");
 
-        ArrayList<Integer> arr=new ArrayList<Integer>(Collections.nCopies(listSize, 0));
+        ArrayList<Integer> arr=new ArrayList<>(Collections.nCopies(listSize, 0));
         for(int count = 0; count < experiments ; count++) {
             DoublyLinkedList doublyLinkedList = new DoublyLinkedList(arr);
             Stopwatch stopwatch = new Stopwatch();
