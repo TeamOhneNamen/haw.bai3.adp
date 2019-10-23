@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -58,6 +57,16 @@ class DoublyLinkedListTest {
         assertThrows(IndexOutOfBoundsException.class, () -> {
             this.emptyDoublyLinkedList.removeFirst();
         });
+    }
+
+    @Test
+    void deleteAllOccurencesTest(){
+        String checkForStr = "twin";
+        List<String> listWithMultipleOccurences = List.of("one", "two",checkForStr, "three", "four",checkForStr);
+        this.emptyDoublyLinkedList.addAll(listWithMultipleOccurences);
+        assertTrue(this.emptyDoublyLinkedList.contains(checkForStr));
+        this.emptyDoublyLinkedList.deleteAllOccurrences(checkForStr);
+        assertFalse(this.emptyDoublyLinkedList.contains(checkForStr));
     }
 
     @Test
@@ -164,10 +173,6 @@ class DoublyLinkedListTest {
         Assertions.assertNotEquals(strArray, this.doublyLinkedListFilledWithStringList.toArray());
     }
 
-    @Test
-    void toArrayTestPositive(){
-        Assertions.assertEquals(this.doublyLinkedListFilledWithStringList.toArray(), this.stringList.toArray());
-    }
 
     @Test
     void addAllTest(){
@@ -180,10 +185,6 @@ class DoublyLinkedListTest {
         Assertions.assertEquals(this.emptyDoublyLinkedList,new ArrayList<>());
     }
 
-    @Test
-    void equalsTestWithFilledListPositive(){
-        Assertions.assertEquals(this.doublyLinkedListFilledWithStringList,this.stringList);
-    }
 
     @Test
     void equalsTestWithCollectionNegative(){

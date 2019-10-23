@@ -5,6 +5,7 @@ import p1.util.Stopwatch;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Random;
 
 public class PerformanceTest {
 
@@ -14,10 +15,10 @@ public class PerformanceTest {
     private static final String CONTAINS = "contains";
 
     private static final String ELEMENT = "asdf";
-    private static final int LIST_SIZE = 400000;
+    private static final int LIST_SIZE = 400000*2;
     private static final int TIMES = 500;
     private static final int EXPERIMENTS = 10;
-    private static final int POSITION = LIST_SIZE;
+    private static final int POSITION= LIST_SIZE/2;
 
     public static void main(String [] args) {
         String method;

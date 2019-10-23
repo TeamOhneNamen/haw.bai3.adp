@@ -6,10 +6,13 @@ import java.util.*;
 import java.util.function.Consumer;
 
 public class DoublyLinkedList<E> implements ListInterface<E> {
+    // Organisatio Nodes
     private final Node<E> FIRST = new Node<>();
     private final Node<E> LAST = new Node<>();
     private int size;
     private final String SEPARATOR;
+
+    //TODO: ringverkettung rausnehmen
 
     public DoublyLinkedList() {
         this.size = 0;
@@ -54,6 +57,7 @@ public class DoublyLinkedList<E> implements ListInterface<E> {
 
     @Override
     public void deleteAtPosition(int index) {
+        //TODO: exception bei negativen indizes
         if(size-1 < index){
             throw new IndexOutOfBoundsException();
         }
@@ -70,7 +74,17 @@ public class DoublyLinkedList<E> implements ListInterface<E> {
     }
 
     @Override
+    public void deleteAllOccurrences(E item) {
+        for(int i =0; i < size; i++){
+            if(this.retrieve(i).equals(item)){
+                this.deleteAtPosition(i);
+            }
+        }
+    }
+
+    @Override
     public void insertAtPosition(int index, E item) {
+        //TODO: exception bei negativen indizes
         if(size < index){
             throw new IndexOutOfBoundsException();
         }
@@ -90,6 +104,7 @@ public class DoublyLinkedList<E> implements ListInterface<E> {
 
     @Override
     public E retrieve(int index) {
+        //TODO: exception bei negativen indizes
         if(size-1 < index){
             throw new IndexOutOfBoundsException();
         }
@@ -101,18 +116,27 @@ public class DoublyLinkedList<E> implements ListInterface<E> {
         return currentNode.getValue();
     }
 
-    //@Override
+    /**
+     * get precomputed size of the List
+     * @return size of the list
+     */
     public int size() {
         return this.size;
     }
 
-    //@Override
+    /**
+     * set true if the List is empty
+     * @return boolean if the List is empty
+     */
     public boolean isEmpty() {
-        return (0 == this.size);
+        return (0 == size());
     }
 
-    //@Override
-    public boolean contains(Object o) {
+    /**
+     * @param o from Type <E>
+     * @return boolean if the Object is in the List
+     */
+    public boolean contains(E o) {
         boolean contains = false;
         for (E element : this) {
             if (element == o) {
@@ -123,7 +147,11 @@ public class DoublyLinkedList<E> implements ListInterface<E> {
         return contains;
     }
 
-    //@Override
+    /**
+     * adding new Element from Type <E> at the emd of the list
+     * @param o
+     * @return boolean if Insert was succes
+     */
     public boolean add(E o) {
         Node<E> node = new Node<>(o);
         Node<E> lastNodeBeforePush = this.LAST.getPredecessor();
@@ -135,8 +163,8 @@ public class DoublyLinkedList<E> implements ListInterface<E> {
         return true;
     }
 
-    //@Override
-    public boolean remove(Object o) {
+    @Override
+    public boolean remove(E o) {
         Node<E> currentNode = this.FIRST.getSuccessor();
         boolean removed = false;
         while ((this.LAST != currentNode) && !removed) {
@@ -152,7 +180,6 @@ public class DoublyLinkedList<E> implements ListInterface<E> {
         return removed;
     }
 
-    //@Override
     public boolean addAll(Collection c) {
         c.forEach(element -> this.add((E) element));
         return true;
@@ -208,6 +235,7 @@ public class DoublyLinkedList<E> implements ListInterface<E> {
 
             @Override
             public boolean hasNext() {
+                //TODO: LAST statt dem index
                 return currentIndex < size;
             }
 
