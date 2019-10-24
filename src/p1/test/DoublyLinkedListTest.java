@@ -1,9 +1,9 @@
 package p1.test;
 
+import org.junit.Test;
 import p1.datastructures.DoublyLinkedList;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
