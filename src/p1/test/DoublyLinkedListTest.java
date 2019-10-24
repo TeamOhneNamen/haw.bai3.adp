@@ -1,6 +1,6 @@
 package p1.test;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import p1.datastructures.DoublyLinkedList;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

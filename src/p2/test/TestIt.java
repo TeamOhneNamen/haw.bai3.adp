@@ -1,7 +1,8 @@
-package p2.util;
+package p2.test;
 
 import p2.datastructures.Warteschlange;
 import p2.interfaces.IWarteschlange;
+import p2.util.BottomUpMergesort;
 
 public class TestIt {
 

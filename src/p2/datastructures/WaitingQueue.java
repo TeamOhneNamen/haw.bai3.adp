@@ -1,13 +1,18 @@
-package p2;
+package p2.datastructures;
 
 import java.util.*;
 
-public class WaitingQueue<E extends Comparable> implements Queue<E> {
+public class WaitingQueue<E extends Comparable> implements Queue<E>, Comparable<WaitingQueue> {
 
     private List<E> data;
 
     public WaitingQueue() {
         this.data = new ArrayList<>();
+    }
+
+    public WaitingQueue(E e) {
+        this.data = new ArrayList<>();
+        this.data.add(e);
     }
 
     public WaitingQueue(Collection<E> c) {
@@ -149,5 +154,10 @@ public class WaitingQueue<E extends Comparable> implements Queue<E> {
     @Override
     public String toString(){
         return Arrays.toString(this.toArray());
+    }
+
+    @Override
+    public int compareTo(WaitingQueue waitingQueue) {
+        return this.size()-waitingQueue.size();
     }
 }
