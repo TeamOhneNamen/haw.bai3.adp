@@ -8,7 +8,6 @@ import p2.util.MergeSort;
 import p2.datastructures.WaitingQueue;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -84,17 +83,17 @@ public class MergeSortTest {
     }
 
     @Test
-    void bottomUpReservedIntList(){
-        Assertions.assertEquals(sortedIntListA, MergeSort.bottomUp(reversedIntListA));
+    void topDownReservedIntList(){
+        Assertions.assertEquals(sortedIntListA, MergeSort.topDown(reversedIntListA));
     }
 
     @Test
-    void bottomUpShuffledIntList(){
-        Assertions.assertEquals(sortedIntListA, MergeSort.bottomUp(reversedIntListA));
+    void topDownShuffledIntList(){
+        Assertions.assertEquals(sortedIntListA, MergeSort.topDown(reversedIntListA));
     }
 
     @Test
-    void bottomUpSortedIntList(){
-        Assertions.assertEquals(sortedIntListA, MergeSort.bottomUp(sortedIntListA));
+    void topDownSortedIntList(){
+        Assertions.assertEquals(sortedIntListA, MergeSort.topDown(sortedIntListA));
     }
 }
