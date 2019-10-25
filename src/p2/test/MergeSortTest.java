@@ -83,6 +83,21 @@ public class MergeSortTest {
     }
 
     @Test
+    void bottomUpReservedIntList(){
+        Assertions.assertEquals(sortedIntListA, MergeSort.bottomUp(reversedIntListA));
+    }
+
+    @Test
+    void bottomUpShuffledIntList(){
+        Assertions.assertEquals(sortedIntListA, MergeSort.bottomUp(reversedIntListA));
+    }
+
+    @Test
+    void bottomUpSortedIntList(){
+        Assertions.assertEquals(sortedIntListA, MergeSort.bottomUp(sortedIntListA));
+    }
+
+    @Test
     void topDownReservedIntList(){
         Assertions.assertEquals(sortedIntListA, MergeSort.topDown(reversedIntListA));
     }

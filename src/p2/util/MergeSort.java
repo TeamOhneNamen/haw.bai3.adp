@@ -50,21 +50,13 @@ public class MergeSort {
 
     public static List topDown(List list) throws ClassCastException {
         MergeSort.arrayAccessCount = 0;
-        WaitingQueue<WaitingQueue> hyperWaitingQueue = new WaitingQueue<>();
-        list.forEach(element -> {
-            MergeSort.arrayAccessCount++;
-                    if (element instanceof Comparable) {
-                        hyperWaitingQueue.add(new WaitingQueue((Comparable) element));
-                    } else {
-                        throw new ClassCastException();
-                    }
-                }
-        );
+        WaitingQueue<WaitingQueue> hyperWaitingQueue = prepareHyperWaiting(list);
+
         while (hyperWaitingQueue.size() > 1) {
             MergeSort.arrayAccessCount++;
-            WaitingQueue mergeList = hyperWaitingQueue.get(0);
+            WaitingQueue mergeList = hyperWaitingQueue.peek();
             MergeSort.arrayAccessCount++;
-            WaitingQueue pollList = hyperWaitingQueue.get(1);
+            WaitingQueue pollList = hyperWaitingQueue.getSecond();
             MergeSort.arrayAccessCount++;
             hyperWaitingQueue.remove();
             MergeSort.arrayAccessCount++;
@@ -73,6 +65,40 @@ public class MergeSort {
             MergeSort.arrayAccessCount++;
             hyperWaitingQueue.add(0, waitingQueueAfterMerge);
         }
-        return List.of(hyperWaitingQueue.get(0).toArray());
+        return List.of(hyperWaitingQueue.peek().toArray());
+    }
+
+    public static List bottomUp(List list) throws ClassCastException {
+        MergeSort.arrayAccessCount = 0;
+        WaitingQueue<WaitingQueue> hyperWaitingQueue = prepareHyperWaiting(list);
+
+        while (hyperWaitingQueue.size() > 1) {
+            MergeSort.arrayAccessCount++;
+            WaitingQueue mergeList = hyperWaitingQueue.getLast();
+            MergeSort.arrayAccessCount++;
+            WaitingQueue pollList = hyperWaitingQueue.getSecondLast();
+            MergeSort.arrayAccessCount++;
+            hyperWaitingQueue.removeLast();
+            MergeSort.arrayAccessCount++;
+            hyperWaitingQueue.removeLast();
+            WaitingQueue waitingQueueAfterMerge = MergeSort.mergeSortedLists(mergeList, pollList);
+            MergeSort.arrayAccessCount++;
+            hyperWaitingQueue.add(waitingQueueAfterMerge);
+        }
+        return List.of(hyperWaitingQueue.peek().toArray());
+    }
+
+    private static WaitingQueue prepareHyperWaiting(List list) throws ClassCastException {
+        WaitingQueue<WaitingQueue> hyperWaitingQueue = new WaitingQueue<>();
+        list.forEach(element -> {
+                    MergeSort.arrayAccessCount++;
+                    if (element instanceof Comparable) {
+                        hyperWaitingQueue.add(new WaitingQueue((Comparable) element));
+                    } else {
+                        throw new ClassCastException();
+                    }
+                }
+        );
+        return hyperWaitingQueue;
     }
 }

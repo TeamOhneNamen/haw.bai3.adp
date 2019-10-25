@@ -160,4 +160,24 @@ public class WaitingQueue<E extends Comparable> implements Queue<E>, Comparable<
     public int compareTo(WaitingQueue waitingQueue) {
         return this.size()-waitingQueue.size();
     }
+
+    public E getLast() {
+        return this.data.get(this.size()-1);
+    }
+
+    public E getSecondLast() {
+        return this.data.get(this.size()-2);
+    }
+
+    public E getSecond() {
+        return this.get(1);
+    }
+
+    public void removeAtPosition(int i) {
+        this.data.remove(this.data.get(i));
+    }
+
+    public void removeLast() {
+        this.removeAtPosition(this.size()-1);
+    }
 }
