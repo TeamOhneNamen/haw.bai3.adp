@@ -15,6 +15,7 @@ package p2.util;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 
 /**
  * The {@code QuickX} class provides static methods for sorting an array
@@ -69,7 +70,7 @@ public class QuickX {
     // and return the index j.
     private static int partition(Comparable[] a, int lo, int hi) {
         int n = hi - lo + 1;
-        int m = median3(a, lo, lo + n / 2, hi);
+        int m = median5(a, lo, lo + n / 2, hi);
         exch(a, m, lo);
 
         int i = lo;
@@ -110,11 +111,27 @@ public class QuickX {
                 (less(a[k], a[j]) ? j : less(a[k], a[i]) ? k : i));
     }
 
+    //https://www.u-helmich.de/inf/BlueJ/kurs121/folge13/Quicksort.pdf
     // return the index of the median element among a[i], a[j], and a[k]
     private static int median5(Comparable[] a, int i, int j, int k) {
-        return (less(a[i], a[j]) ?
-                (less(a[j], a[k]) ? j : less(a[i], a[k]) ? k : i) :
-                (less(a[k], a[j]) ? j : less(a[k], a[i]) ? k : i));
+        int l = (i+j)/2;
+        int m = (j+k)/2;
+        return median5(a, i, j, k, l, m);
+    }
+    private static int median5(Comparable[] a, int i, int j, int k, int l, int m) {
+        Comparable[] medianArray = {a[i], a[j], a[k], a[l], a[l], a[m]};
+        Arrays.sort(medianArray);
+        if(medianArray.equals(a[i])){
+            return i;
+        } else if(medianArray.equals(a[j])){
+            return j;
+        } else if(medianArray.equals(a[k])){
+            return k;
+        } else if(medianArray.equals(a[l])){
+            return l;
+        }else {
+            return m;
+        }
     }
 
     /***************************************************************************
@@ -137,7 +154,7 @@ public class QuickX {
     /***************************************************************************
      *  Check if array is sorted - useful for debugging.
      ***************************************************************************/
-    private static boolean isSorted(Comparable[] a) {
+    public static boolean isSorted(Comparable[] a) {
         for (int i = 1; i < a.length; i++)
             if (less(a[i], a[i - 1])) return false;
         return true;
@@ -170,6 +187,7 @@ public class QuickX {
 
                 QuickX.sort(a);
                 assert isSorted(a);
+                System.out.print("result: ");
                 show(a);
             }
 
