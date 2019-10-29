@@ -1,4 +1,4 @@
-package p2.util;
+package p2.edu.princeton.cs.algs4;
 
 /******************************************************************************
  *  Compilation:  javac QuickX.java
@@ -11,6 +11,8 @@ package p2.util;
  *  element using median-of-3, and cuts off to insertion sort.
  *
  ******************************************************************************/
+
+import p2.util.Insertion;
 
 import java.io.BufferedReader;
 import java.io.IOException;

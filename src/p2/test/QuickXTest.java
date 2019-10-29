@@ -2,7 +2,7 @@ package p2.test;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import p2.util.QuickX;
+import p2.edu.princeton.cs.algs4.QuickX;
 
 import java.util.Arrays;
 import java.util.Collections;
