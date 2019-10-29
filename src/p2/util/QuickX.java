@@ -53,6 +53,10 @@ public class QuickX {
     // quicksort the subarray from a[lo] to a[hi]
     private static void sort(Comparable[] a, int lo, int hi) {
         if (hi <= lo) return;
+        /**
+         * @author Thorben
+         */
+        System.out.println("array to sort: " + Arrays.toString(Arrays.copyOfRange(a, lo, hi)));
 
         // cutoff to insertion sort (Insertion.sort() uses half-open intervals)
         int n = hi - lo + 1;
@@ -111,13 +115,17 @@ public class QuickX {
                 (less(a[k], a[j]) ? j : less(a[k], a[i]) ? k : i));
     }
 
-    //https://www.u-helmich.de/inf/BlueJ/kurs121/folge13/Quicksort.pdf
-    // return the index of the median element among a[i], a[j], and a[k]
+    /**
+     * @link https://www.u-helmich.de/inf/BlueJ/kurs121/folge13/Quicksort.pdf
+     * @author Thorben
+     * @return the index of the median element among a[i], a[j], and a[k]
+     */
     private static int median5(Comparable[] a, int i, int j, int k) {
         int l = (i+j)/2;
         int m = (j+k)/2;
         return median5(a, i, j, k, l, m);
     }
+
     private static int median5(Comparable[] a, int i, int j, int k, int l, int m) {
         Comparable[] medianArray = {a[i], a[j], a[k], a[l], a[l], a[m]};
         Arrays.sort(medianArray);
