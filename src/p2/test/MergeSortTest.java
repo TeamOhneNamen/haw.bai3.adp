@@ -61,25 +61,24 @@ public class MergeSortTest {
 
     }
 
-
     @Test
-    void mergeSortedLists(){
-        Assertions.assertEquals(this.sortedIntWaitingQueueAAndBMerged, MergeSort.mergeSortedLists(this.sortedIntWaitingQueueA, this.sortedIntWaitingQueueB));
+    void mergeSortedQueues(){
+        Assertions.assertEquals(this.sortedIntWaitingQueueAAndBMerged, MergeSort.mergeSortedQueues(this.sortedIntWaitingQueueA, this.sortedIntWaitingQueueB));
     }
 
     @Test
-    void mergeSortedListsSingleElementListsSmallerElementLast(){
-        Assertions.assertEquals(this.singleElementWaitingQueueAANdBMerged, MergeSort.mergeSortedLists(this.singleElementWaitingQueueA, this.singleElementWaitingQueueB));
+    void mergeSortedQueuesSingleElementQueuesSmallerElementLast(){
+        Assertions.assertEquals(this.singleElementWaitingQueueAANdBMerged, MergeSort.mergeSortedQueues(this.singleElementWaitingQueueA, this.singleElementWaitingQueueB));
     }
 
     @Test
-    void mergeSortedListsSingleElementListsSmallerElementFirst(){
-        Assertions.assertEquals(this.singleElementWaitingQueueAANdBMerged, MergeSort.mergeSortedLists(this.singleElementWaitingQueueB, this.singleElementWaitingQueueA));
+    void mergeSortedQueuesSingleElementQueuesSmallerElementFirst(){
+        Assertions.assertEquals(this.singleElementWaitingQueueAANdBMerged, MergeSort.mergeSortedQueues(this.singleElementWaitingQueueB, this.singleElementWaitingQueueA));
     }
 
     @Test
-    void mergeSortedListsSingleElementAndSortedIntListsSmallerElementFirst(){
-        Assertions.assertEquals(this.singleElementWaitingQueueBAndsortedIntWaitingQueueBBMerged, MergeSort.mergeSortedLists(this.singleElementWaitingQueueB, this.sortedIntWaitingQueueB));
+    void mergeSortedQueuesSingleElementAndSortedIntQueuesSmallerElementFirst(){
+        Assertions.assertEquals(this.singleElementWaitingQueueBAndsortedIntWaitingQueueBBMerged, MergeSort.mergeSortedQueues(this.singleElementWaitingQueueB, this.sortedIntWaitingQueueB));
     }
 
     @Test
@@ -95,20 +94,5 @@ public class MergeSortTest {
     @Test
     void bottomUpSortedIntList(){
         Assertions.assertEquals(sortedIntListA, MergeSort.bottomUp(sortedIntListA));
-    }
-
-    @Test
-    void topDownReservedIntList(){
-        Assertions.assertEquals(sortedIntListA, MergeSort.topDown(reversedIntListA));
-    }
-
-    @Test
-    void topDownShuffledIntList(){
-        Assertions.assertEquals(sortedIntListA, MergeSort.topDown(reversedIntListA));
-    }
-
-    @Test
-    void topDownSortedIntList(){
-        Assertions.assertEquals(sortedIntListA, MergeSort.topDown(sortedIntListA));
     }
 }

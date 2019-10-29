@@ -4,7 +4,6 @@ package p2.datastructures;
 
 import p2.util.MergeSort;
 import p2.util.VectorUtil;
-import p2.util.VectorWithEuclideanDistanceToRootVector;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -66,7 +65,7 @@ public class Vector implements Comparable<Vector> {
             vectorWithEuclideanDistanceToRootVectors.add(new VectorWithEuclideanDistanceToRootVector(vector,this.compareTo(vector)));
         });
 
-        List<VectorWithEuclideanDistanceToRootVector> sortedList = MergeSort.topDown(vectorWithEuclideanDistanceToRootVectors);
+        List<VectorWithEuclideanDistanceToRootVector> sortedList = MergeSort.bottomUp(vectorWithEuclideanDistanceToRootVectors);
         List<Vector> returnList = new ArrayList<>();
         for (int i = 0; i < nearestVectorsQuantity; i++) {
             returnList.add(sortedList.get(i).vector);

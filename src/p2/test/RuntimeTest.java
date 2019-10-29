@@ -42,7 +42,6 @@ public class RuntimeTest {
             Stopwatch stopwatch = new Stopwatch();
             switch (method) {
                 case MERGE_TOP_DOWN:
-                    MergeSort.topDown(arr);
                     break;
                 default:
                     System.err.println(method + "is not a valid value");

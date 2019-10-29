@@ -2,70 +2,39 @@ package p2.util;
 
 import p2.datastructures.WaitingQueue;
 
+import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 public class MergeSort {
 
     public static int arrayAccessCount = 0;
 
-    public static WaitingQueue mergeSortedLists(WaitingQueue list1, WaitingQueue list2) throws ClassCastException {
-        WaitingQueue mergeList = list1.clone();
-        WaitingQueue pollList = list2.clone();
-        if (list1.isEmpty()) {
-            return list2.clone();
-        }
-        if (list2.isEmpty()) {
-            return list1.clone();
-        }
-        int i = 0;
-        while (!pollList.isEmpty()) {
-            if (i < mergeList.size()) {
-                MergeSort.arrayAccessCount++;
-                Object polledElement = pollList.peek();
-                if (i < mergeList.size() - 1) {
-                    if (((mergeList.get(i)).compareTo(polledElement) <= 0) && (mergeList.get(i + 1)).compareTo(polledElement) >= 0) {
-                        MergeSort.arrayAccessCount++;
-                        mergeList.add(i + 1, (Comparable) polledElement);
-                        MergeSort.arrayAccessCount++;
-                        pollList.remove();
-                    }
-                } else if ((mergeList.get(i)).compareTo(polledElement) <= 0) {
-                    MergeSort.arrayAccessCount++;
-                    mergeList.add(i + 1, (Comparable) polledElement);
-                    MergeSort.arrayAccessCount++;
-                    pollList.remove();
-                } else {
-                    MergeSort.arrayAccessCount++;
-                    mergeList.add(0, (Comparable) polledElement);
-                    MergeSort.arrayAccessCount++;
-                    pollList.remove();
-                }
-                i++;
-            } else {
+
+    public static WaitingQueue mergeSortedQueues(WaitingQueue q1, WaitingQueue q2) {
+        WaitingQueue merged = new WaitingQueue<>();
+        Comparable e1 = q1.peek();
+        Comparable e2 = q2.peek();
+        while(true){
+            if(e1.compareTo(e2) < 0){
+                merged.add(e1);
+                q1.poll();
+                e1 = q1.peek();
+            }else {
+                merged.add(e2);
+                q2.poll();
+                e2 = q2.peek();
+            }
+            if(q1.isEmpty()){
+                merged.addAll(q2);
+                break;
+            }else if(q2.isEmpty()){
+                merged.addAll(q1);
                 break;
             }
         }
-        return mergeList;
-    }
-
-    public static List topDown(List list) throws ClassCastException {
-        MergeSort.arrayAccessCount = 0;
-        WaitingQueue<WaitingQueue> hyperWaitingQueue = prepareHyperWaiting(list);
-
-        while (hyperWaitingQueue.size() > 1) {
-            MergeSort.arrayAccessCount++;
-            WaitingQueue mergeList = hyperWaitingQueue.peek();
-            MergeSort.arrayAccessCount++;
-            WaitingQueue pollList = hyperWaitingQueue.getSecond();
-            MergeSort.arrayAccessCount++;
-            hyperWaitingQueue.remove();
-            MergeSort.arrayAccessCount++;
-            hyperWaitingQueue.remove();
-            WaitingQueue waitingQueueAfterMerge = MergeSort.mergeSortedLists(mergeList, pollList);
-            MergeSort.arrayAccessCount++;
-            hyperWaitingQueue.add(0, waitingQueueAfterMerge);
-        }
-        return List.of(hyperWaitingQueue.peek().toArray());
+        return merged;
     }
 
     public static List bottomUp(List list) throws ClassCastException {
@@ -74,14 +43,10 @@ public class MergeSort {
 
         while (hyperWaitingQueue.size() > 1) {
             MergeSort.arrayAccessCount++;
-            WaitingQueue mergeList = hyperWaitingQueue.getLast();
+            WaitingQueue mergeList = hyperWaitingQueue.poll();
             MergeSort.arrayAccessCount++;
-            WaitingQueue pollList = hyperWaitingQueue.getSecondLast();
-            MergeSort.arrayAccessCount++;
-            hyperWaitingQueue.removeLast();
-            MergeSort.arrayAccessCount++;
-            hyperWaitingQueue.removeLast();
-            WaitingQueue waitingQueueAfterMerge = MergeSort.mergeSortedLists(mergeList, pollList);
+            WaitingQueue pollList = hyperWaitingQueue.poll();
+            WaitingQueue waitingQueueAfterMerge = MergeSort.mergeSortedQueues(mergeList, pollList);
             MergeSort.arrayAccessCount++;
             hyperWaitingQueue.add(waitingQueueAfterMerge);
         }

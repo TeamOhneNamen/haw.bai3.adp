@@ -1,6 +1,4 @@
-package p2.util;
-
-import p2.datastructures.Vector;
+package p2.datastructures;
 
 public class VectorWithEuclideanDistanceToRootVector implements Comparable<VectorWithEuclideanDistanceToRootVector> {
     public Vector vector;

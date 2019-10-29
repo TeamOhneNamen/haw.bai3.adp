@@ -55,16 +55,6 @@ public class WaitingQueue<E extends Comparable> implements Queue<E>, Comparable<
         return this.data.add(e);
     }
 
-    public void add(int i, E e) {
-        this.data.add(i, e);
-    }
-
-    //return element at the position i in the WaitingQueue
-    public E get(int i){
-        return this.data.get(i);
-    }
-
-    //TODO: add sorted
     @Override
     public boolean remove(Object o) {
         return this.data.remove(o);
@@ -72,7 +62,7 @@ public class WaitingQueue<E extends Comparable> implements Queue<E>, Comparable<
 
     @Override
     public boolean containsAll(Collection<?> c) {
-        return this.containsAll(c);
+        return this.data.containsAll(c);
     }
 
     @Override
@@ -87,7 +77,7 @@ public class WaitingQueue<E extends Comparable> implements Queue<E>, Comparable<
 
     @Override
     public boolean retainAll(Collection<?> c) {
-        return this.retainAll(c);
+        return this.data.retainAll(c);
     }
 
     @Override
@@ -95,20 +85,17 @@ public class WaitingQueue<E extends Comparable> implements Queue<E>, Comparable<
         this.data.clear();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public boolean equals(Object o) {
-        if (!(o.getClass().equals(this.getClass()))) {
+        if(!(o instanceof Collection<?>)){
             return false;
-        } else if (((WaitingQueue) o).size() != this.size()) {
+        }else if(this.size( ) != ((Collection <E>)o).size()){
             return false;
         } else {
-            for (int i = 0; i < this.size(); i++) {
-                if(!this.get(i).equals(((WaitingQueue) o).get(i))){
-                    return false;
-                }
-            }
-            return true;
+            return this.containsAll((Collection <E>) o) && ((Collection <E>) o).containsAll(this);
         }
+
     }
 
     @Override
@@ -147,10 +134,6 @@ public class WaitingQueue<E extends Comparable> implements Queue<E>, Comparable<
         return this.data.get(0);
     }
 
-    public WaitingQueue<E> clone(){
-        return new WaitingQueue<>(this.data);
-    }
-
     @Override
     public String toString(){
         return Arrays.toString(this.toArray());
@@ -159,25 +142,5 @@ public class WaitingQueue<E extends Comparable> implements Queue<E>, Comparable<
     @Override
     public int compareTo(WaitingQueue waitingQueue) {
         return this.size()-waitingQueue.size();
-    }
-
-    public E getLast() {
-        return this.data.get(this.size()-1);
-    }
-
-    public E getSecondLast() {
-        return this.data.get(this.size()-2);
-    }
-
-    public E getSecond() {
-        return this.get(1);
-    }
-
-    public void removeAtPosition(int i) {
-        this.data.remove(this.data.get(i));
-    }
-
-    public void removeLast() {
-        this.removeAtPosition(this.size()-1);
     }
 }
