@@ -1,439 +1,214 @@
-//package p2.datastructures;
-//
-//import java.util.AbstractCollection;
-//import java.util.ArrayList;
-//import java.util.Collections;
-//import java.util.Iterator;
-//
-//public class MinMaxHeap<Integer> extends AbstractCollection<Integer> {
-//
-//    // index starts at 1 to follow article
-//    // min at root and at even levels; max at root dtrs
-//    private final Integer[] mHeap;
-//
-//    private final int mHeapLength;
-//
-//    // true for min levels
-//    private final boolean[] mLevelTypes;
-//
-//    private int mNextFreeIndex = 1;
-//
-//    /**
-//     * Construct a min-max heap holding up to the specified
-//     * number of elements.   Min-max heaps do not grow
-//     * dynamically and attempts to push an element onto a full
-//     * heap will result in exceptions.
-//     *
-//     * @param maxSize Maximum number of elements in the heap.
-//     */
-//    public MinMaxHeap(int maxSize) {
-//        if (maxSize < 1) {
-//            String msg = "Heaps must be at least one element."
-//                    + " Found maxSize=" + maxSize;
-//            throw new IllegalArgumentException(msg);
-//        }
-//        // required for array
-//        @SuppressWarnings("unchecked")
-//        int size = maxSize+1;
-//        Integer tempHeap[] = new Integer[5];
-//        mHeap = tempHeap;
-//        mHeapLength = mHeap.length;
-//        mLevelTypes = new boolean[maxSize+1];
-//        fillLevelTypes(mLevelTypes);
-//    }
-//
-//    /**
-//     * Returns the current size of this heap.
-//     *
-//     * @return The size of the heap.
-//     */
-//    @Override
-//    public int size() {
-//        return mNextFreeIndex - 1;
-//    }
-//
-//
-//    /**
-//     * Returns an iterator over this heap.  The elements are returned
-//     * in decreasing order of score.
-//     *
-//     * @return Iterator over this heap in decreasing order of score.
-//     */
-//    @Override
-//    public Iterator<Integer> iterator() {
-//        ArrayList<Integer> list = new ArrayList<Integer>();
-//        for (int i = 0; i < mNextFreeIndex; ++i)
-//            list.add(mHeap[i]);
-//        Collections.<Integer>sort(list,ScoredObject.reverseComparator());
-//        return list.iterator();
-//    }
-//
-//    /**
-//     * Add the element to the heap.
-//     *
-//     * @param s Element to add to heap.
-//     * @return <code>true</code> if the element is added.
-//     */
-//    @Override
-//    public boolean add(Integer s) {
-//        // space still left
-//        if (mNextFreeIndex < mHeapLength) {
-//            mHeap[mNextFreeIndex++] = s;
-//            bubbleUp(mNextFreeIndex-1);
-//            return true;
-//        } else if (s <= peekMin()) {
-//            return false;
-//        } else {
-//            popMin();
-//            mHeap[mNextFreeIndex++] = s;
-//            bubbleUp(mNextFreeIndex-1);
-//            return true;
-//        }
-//    }
-//
-//    /**
-//     * Returns the maximum element in the heap, or <code>null</code>
-//     * if it is empty.
-//     *
-//     * @return The largest element in the heap.
-//     */
-//    public Integer peekMax() {
-//        return
-//                ( mNextFreeIndex == 1
-//                        ? null
-//                        : (mNextFreeIndex == 2
-//                        ? mHeap[1]
-//                        : (mNextFreeIndex == 3
-//                        ? mHeap[2]
-//                        : ( mHeap[2].score() > mHeap[3].score()
-//                        ? mHeap[2]
-//                        : mHeap[3] ) ) ) );
-//    }
-//
-//
-//    /**
-//     * Returns the minimum element in the heap, or <code>null</code>
-//     * if it is empty.
-//     *
-//     * @return The smallest element in the heap.
-//     */
-//    public Integer peekMin() {
-//        return (mNextFreeIndex == 1)
-//                ? null
-//                : mHeap[1];
-//    }
-//
-//    /**
-//     * Returns the maximum element in the heap after removing it, or
-//     * returns <code>null</code> if the heap is empty.
-//     *
-//     * @return The largest element in the heap.
-//     */
-//    public Integer popMax() {
-//        if (mNextFreeIndex == 1) return null;
-//
-//        // only one element; return it
-//        if (mNextFreeIndex == 2) {
-//            --mNextFreeIndex;
-//            return mHeap[1];
-//        }
-//
-//        // two elements, so max is only on second level
-//        if (mNextFreeIndex == 3) {
-//            --mNextFreeIndex;
-//            return mHeap[2];
-//        }
-//
-//        // at least three elements, so check level 1 dtrs
-//        if (mHeap[2].score() > mHeap[3].score()) {
-//            Integer max = mHeap[2];
-//            mHeap[2] = mHeap[--mNextFreeIndex];
-//            trickleDownMax(2);
-//            return max;
-//        } else {
-//            Integer max = mHeap[3];
-//            mHeap[3] = mHeap[--mNextFreeIndex];
-//            trickleDownMax(3);
-//            return max;
-//        }
-//    }
-//
-//    /**
-//     * Returns the minimum element in the heap after removing it, or
-//     * returns <code>null</code> if the heap is empty.
-//     *
-//     * @return The smallest element in the heap.
-//     */
-//    public Integer popMin() {
-//        if (mNextFreeIndex == 1) return null;
-//
-//        if (mNextFreeIndex == 2) {
-//            mNextFreeIndex = 1;
-//            return mHeap[1];
-//        }
-//
-//        Integer min = mHeap[1];
-//        mHeap[1] = mHeap[--mNextFreeIndex];
-//        trickleDownMin(1);
-//        return min;
-//    }
-//
-//    /**
-//     * Returns a string-based representation of this heap.
-//     *
-//     * @return String representation of this heap.
-//     */
-//    @Override
-//    public String toString() {
-//        if (mNextFreeIndex == 1) return "EMPTY HEAP";
-//        StringBuilder sb = new StringBuilder();
-//        for (int i = 1; i < mNextFreeIndex; ++i) {
-//            if (i > 1) sb.append("\n");
-//            sb.append(i + "=" + mHeap[i]);
-//        }
-//        return sb.toString();
-//    }
-//
-//    void bubbleUp(int nodeIndex) {
-//        if (!hasParent(nodeIndex)) return;
-//        int parentIndex = parentIndex(nodeIndex);
-//        if (onMinLevel(nodeIndex)) {
-//            if (mHeap[nodeIndex].score() > mHeap[parentIndex].score()) {
-//                swap(nodeIndex,parentIndex);
-//                bubbleUpMax(parentIndex);
-//            } else {
-//                bubbleUpMin(nodeIndex);
-//            }
-//        } else {  // on max level
-//            if (mHeap[nodeIndex].score() < mHeap[parentIndex].score()) {
-//                swap(nodeIndex,parentIndex);
-//                bubbleUpMin(parentIndex);
-//            } else {
-//                bubbleUpMax(nodeIndex);
-//            }
-//        }
-//    }
-//
-//    void bubbleUpMin(int nodeIndex) {
-//        while (true) {
-//            if (!hasParent(nodeIndex)) return;
-//            int parentIndex = parentIndex(nodeIndex);
-//            if (!hasParent(parentIndex)) return;
-//            int grandparentIndex = parentIndex(parentIndex);
-//            if (mHeap[nodeIndex].score()
-//                    >= mHeap[grandparentIndex].score()) return;
-//            swap(nodeIndex,grandparentIndex);
-//            nodeIndex = grandparentIndex;
-//        }
-//    }
-//
-//    void bubbleUpMax(int nodeIndex) {
-//        while (true) {
-//            if (!hasParent(nodeIndex)) return;
-//            int parentIndex = parentIndex(nodeIndex);
-//            if (!hasParent(parentIndex)) return;
-//            int grandparentIndex = parentIndex(parentIndex);
-//            if (mHeap[nodeIndex].score()
-//                    <= mHeap[grandparentIndex].score()) return;
-//            swap(nodeIndex,grandparentIndex);
-//            nodeIndex = grandparentIndex;
-//        }
-//    }
-//
-//
-//    boolean onMinLevel(int nodeIndex) {
-//        return mLevelTypes[nodeIndex];
-//    }
-//
-//    void trickleDown(int nodeIndex) {
-//        if (noChildren(nodeIndex)) return;
-//        if (onMinLevel(nodeIndex))
-//            trickleDownMin(nodeIndex);
-//        else
-//            trickleDownMax(nodeIndex);
-//    }
-//
-//    void trickleDownMin(int nodeIndex) {
-//        while (leftDaughterIndex(nodeIndex) < mNextFreeIndex) { // has dtrs
-//            int minDescIndex = minDtrOrGrandDtrIndex(nodeIndex);
-//            if (isDaughter(nodeIndex,minDescIndex)) {
-//                if (mHeap[minDescIndex].score() < mHeap[nodeIndex].score())
-//                    swap(minDescIndex,nodeIndex);
-//                return;
-//            } else {  // is grand child
-//                if (mHeap[minDescIndex].score() >= mHeap[nodeIndex].score())
-//                    return;
-//                swap(minDescIndex,nodeIndex);
-//                int parentIndex = parentIndex(minDescIndex);
-//                if (mHeap[minDescIndex].score() > mHeap[parentIndex].score())
-//                    swap(minDescIndex,parentIndex);
-//                nodeIndex = minDescIndex; // recursive call in paper
-//            }
-//        }
-//    }
-//
-//    void trickleDownMax(int nodeIndex) {
-//        while (leftDaughterIndex(nodeIndex) < mNextFreeIndex) {
-//            int maxDescIndex = maxDtrOrGrandDtrIndex(nodeIndex);
-//            if (isDaughter(nodeIndex,maxDescIndex)) {
-//                if (mHeap[maxDescIndex].score() > mHeap[nodeIndex].score())
-//                    swap(maxDescIndex,nodeIndex);
-//                return;
-//            } else {  // is grand child
-//                if (mHeap[maxDescIndex].score() <= mHeap[nodeIndex].score())
-//                    return;
-//                swap(maxDescIndex,nodeIndex);
-//                int parentIndex = parentIndex(maxDescIndex);
-//                if (mHeap[maxDescIndex].score() < mHeap[parentIndex].score())
-//                    swap(maxDescIndex,parentIndex);
-//                nodeIndex = maxDescIndex; // recursive call in paper
-//            }
-//        }
-//    }
-//
-//
-//    // requires nodeIndex to have a dtr
-//    int minDtrOrGrandDtrIndex(int nodeIndex) {
-//        // start with left dtr; must have a dtr coming in
-//        int leftDtrIndex = leftDaughterIndex(nodeIndex);
-//        int minIndex = leftDtrIndex;
-//        double minScore = mHeap[leftDtrIndex].score();
-//
-//        int rightDtrIndex = rightDaughterIndex(nodeIndex);
-//        if (rightDtrIndex >= mNextFreeIndex) return minIndex;
-//        double rightDtrScore = mHeap[rightDtrIndex].score();
-//        if (rightDtrScore < minScore) {
-//            minIndex = rightDtrIndex;
-//            minScore = rightDtrScore;
-//        }
-//
-//        int grandDtr1Index = leftDaughterIndex(leftDtrIndex);
-//        if (grandDtr1Index >= mNextFreeIndex) return minIndex;
-//        double grandDtr1Score = mHeap[grandDtr1Index].score();
-//        if (grandDtr1Score < minScore) {
-//            minIndex = grandDtr1Index;
-//            minScore = grandDtr1Score;
-//        }
-//
-//        int grandDtr2Index = rightDaughterIndex(leftDtrIndex);
-//        if (grandDtr2Index >= mNextFreeIndex) return minIndex;
-//        double grandDtr2Score = mHeap[grandDtr2Index].score();
-//        if (grandDtr2Score < minScore) {
-//            minIndex = grandDtr2Index;
-//            minScore = grandDtr2Score;
-//        }
-//
-//        int grandDtr3Index = leftDaughterIndex(rightDtrIndex);
-//        if (grandDtr3Index >= mNextFreeIndex) return minIndex;
-//        double grandDtr3Score = mHeap[grandDtr3Index].score();
-//        if (grandDtr3Score < minScore) {
-//            minIndex = grandDtr3Index;
-//            minScore = grandDtr3Score;
-//        }
-//
-//        int grandDtr4Index = rightDaughterIndex(rightDtrIndex);
-//        if (grandDtr4Index >= mNextFreeIndex) return minIndex;
-//        double grandDtr4Score = mHeap[grandDtr4Index].score();
-//
-//        return grandDtr4Score < minScore
-//                ? grandDtr4Index
-//                : minIndex;
-//    }
-//
-//
-//    // requires nodeIndex to have a dtr
-//    int maxDtrOrGrandDtrIndex(int nodeIndex) {
-//        // start with left dtr; must have a dtr coming in
-//        int leftDtrIndex = leftDaughterIndex(nodeIndex);
-//        int maxIndex = leftDtrIndex;
-//        double maxScore = mHeap[leftDtrIndex].score();
-//
-//        int rightDtrIndex = rightDaughterIndex(nodeIndex); // opt to left+1
-//        if (rightDtrIndex >= mNextFreeIndex) return maxIndex;
-//        double rightDtrScore = mHeap[rightDtrIndex].score();
-//        if (rightDtrScore > maxScore) {
-//            maxIndex = rightDtrIndex;
-//            maxScore = rightDtrScore;
-//        }
-//
-//        int grandDtr1Index = leftDaughterIndex(leftDtrIndex);
-//        if (grandDtr1Index >= mNextFreeIndex) return maxIndex;
-//        double grandDtr1Score = mHeap[grandDtr1Index].score();
-//        if (grandDtr1Score > maxScore) {
-//            maxIndex = grandDtr1Index;
-//            maxScore = grandDtr1Score;
-//        }
-//
-//        int grandDtr2Index = rightDaughterIndex(leftDtrIndex);
-//        if (grandDtr2Index >= mNextFreeIndex) return maxIndex;
-//        double grandDtr2Score = mHeap[grandDtr2Index].score();
-//        if (grandDtr2Score > maxScore) {
-//            maxIndex = grandDtr2Index;
-//            maxScore = grandDtr2Score;
-//        }
-//
-//        int grandDtr3Index = leftDaughterIndex(rightDtrIndex);
-//        if (grandDtr3Index >= mNextFreeIndex) return maxIndex;
-//        double grandDtr3Score = mHeap[grandDtr3Index].score();
-//        if (grandDtr3Score > maxScore) {
-//            maxIndex = grandDtr3Index;
-//            maxScore = grandDtr3Score;
-//        }
-//
-//        int grandDtr4Index = rightDaughterIndex(rightDtrIndex);
-//        if (grandDtr4Index >= mNextFreeIndex) return maxIndex;
-//        double grandDtr4Score = mHeap[grandDtr4Index].score();
-//
-//        return grandDtr4Score > maxScore
-//                ? grandDtr4Index
-//                : maxIndex;
-//    }
-//
-//    boolean hasParent(int nodeIndex) {
-//        return nodeIndex > 1;
-//    }
-//
-//
-//    boolean noChildren(int nodeIndex) {
-//        return leftDaughterIndex(nodeIndex) >= mHeapLength;
-//    }
-//
-//    boolean isDaughter(int nodeIndexParent, int nodeIndexDescendant) {
-//        return nodeIndexDescendant <= rightDaughterIndex(nodeIndexParent);
-//    }
-//
-//    void swap(int index1, int index2) {
-//        Integer temp = mHeap[index1];
-//        mHeap[index1] = mHeap[index2];
-//        mHeap[index2] = temp;
-//    }
-//
-//
-//    static int parentIndex(int nodeIndex) {
-//        return nodeIndex/2;   // Java's int arith rounds down
-//    }
-//
-//    static int leftDaughterIndex(int nodeIndex) {
-//        return 2 * nodeIndex;
-//    }
-//
-//    static int rightDaughterIndex(int nodeIndex) {
-//        return 2 * nodeIndex + 1;
-//    }
-//
-//    static void fillLevelTypes(boolean[] levelTypes) {
-//        boolean type = MAX_LEVEL;
-//        int index = 1;
-//        for (int numEltsOfType = 1; ; numEltsOfType *= 2) {  // 2**n per level
-//            type = !type;  // reverse types at each level
-//            for (int j = 0; j < numEltsOfType; ++j) {
-//                if (index >= levelTypes.length) return;
-//                levelTypes[index++] = type;
-//            }
-//        }
-//    }
-//
-//    static final boolean MIN_LEVEL = true;
-//    static final boolean MAX_LEVEL = false;
-//
-//}
+package p2.datastructures;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class MinMaxHeap<Key extends Comparable <? super Key>> {
+
+    public Key [] pq;
+    public int N = 0 ; // in pq [1..N] 0 wird nicht verwendet
+
+    /***
+     * @source AD_2 Sortieren 2 Fol. 31
+     * @param maxN
+     */
+    public MinMaxHeap (int maxN){
+        pq = (Key []) new Comparable [ maxN+1];
+    }
+
+    public MinMaxHeap (List<Key> list){
+        pq = (Key []) new Comparable [ list.size()+1];
+        list.forEach(this::insert);
+    }
+
+    public boolean isIndexMinLevel(int i) {
+        return (Math.log(i) % 2) == 0;
+    }
+
+    public int getParentIndex(int i) {
+        return i / 2;
+    }
+
+    public int getGrantparentIndex(int i) {
+        return i / 4;
+    }
+
+    public boolean hasGrandparent(int i) {
+        return this.getGrantparentIndex(i) > 0;
+    }
+
+    public int getLeftChildIndex(int i) {
+        return 2 * i;
+    }
+
+    public int getRightChildIndex(int i) {
+        return (2 * i) + 1;
+    }
+
+    public Key getMin() {
+        return this.pq[1];
+    }
+
+    public int size() {
+        return this.pq.length;
+    }
+
+    public Key get(int i) {
+        return this.pq[i];
+    }
+
+    public void set(int i, Key key) {
+        this.pq[i] = key;
+    }
+
+    public Key getMax() {
+        if (this.size() == 0) {
+            return null;
+        }
+
+        if (this.size() == 1) {
+            return this.get(1);
+        }
+
+        if (this.size() == 2) {
+            return this.get(2);
+        }
+        return max(this.get(2), this.get(3));
+    }
+
+    private Key max(Key leftValue, Key rightValue) {
+        if (leftValue.compareTo(rightValue) < 0) {
+            return rightValue;
+        }
+        return leftValue;
+    }
+
+    //AD_2 Sortieren 2 Fol. 30
+    // exchange two elements via their index
+    private void exch(int i, int j) {
+        Key tmp = this.get(i);
+        this.set(i, this.get(j));
+        this.set(j, tmp);
+    }
+
+
+    //AD_2 Sortieren 2 Fol. 30
+    private boolean less(int i, int j) {
+        return this.get(i).compareTo(this.get(j)) < 0;
+    }
+
+
+    /***
+     * Der größere Kindknoten „schwimmt“ nach oben
+     * solange bis er kleiner als der erste Elternknoten ist.
+     * @source AD_2 Sortieren 2 Fol. 31
+     * @param k index of the element
+     */
+    private void swim(int k) {
+        while (k > 1 && less(k / 2, k)) {
+            exch(k / 2, k);
+            k = k / 2;
+        }
+    }
+
+    /***
+     * Schlüssel hinten an den Heap anfügen
+     * und mit dem Schlüssel Größe um 1 erhöhen
+     * mit dem Schlüssel nach oben schwimmen
+     * @source AD_2 Sortieren 2 Fol. 30
+     * @param v element which should be inserted
+     */
+    public void insert (Key v) {
+        pq[++N] = v;
+        pushUp(N);
+    }
+
+
+    /***
+     * @source https://en.wikipedia.org/wiki/Min-max_heap
+     * @param i
+     */
+    private void pushUp(int i){
+        if(i != 1){
+            if(isIndexMinLevel(i)){
+                if(this.get(i).compareTo(this.get(this.getParentIndex(i)))>=0){
+                    exch(i, this.getParentIndex(i));
+                    this.pushUpMax(this.getParentIndex(i));
+                } else {
+                    this.pushUpMin(i);
+                }
+            } else {
+                if(this.get(i).compareTo(this.get(this.getParentIndex(i)))<0){
+                    exch(i, this.getParentIndex(i));
+                    this.pushUpMin(this.getParentIndex(i));
+                } else {
+                    this.pushUpMax(i);
+                }
+            }
+        }
+    }
+
+    /***
+     * @source https://en.wikipedia.org/wiki/Min-max_heap
+     * @param i
+     */
+    private void pushUpMin(int i){
+        if(this.hasGrandparent(i) && this.get(i).compareTo(this.get(this.getGrantparentIndex(i))) <0){
+            exch(i,this.getGrantparentIndex(i));
+            pushUpMin(this.getGrantparentIndex(i));
+        }
+    }
+
+    /***
+     * @source https://en.wikipedia.org/wiki/Min-max_heap
+     * @param i
+     */
+    private void pushUpMax(int i){
+        if(this.hasGrandparent(i) && this.get(i).compareTo(this.get(this.getGrantparentIndex(i))) >0){
+            exch(i,this.getGrantparentIndex(i));
+            pushUpMax(this.getGrantparentIndex(i));
+        }
+    }
+
+
+    @Override
+    public String toString () {
+        StringBuffer stringBuffer = new StringBuffer();
+        stringBuffer.append("digraph G {\n");
+        stringBuffer.append(branchToString(1));
+        stringBuffer.append("}");
+        return stringBuffer.toString();
+    }
+
+    private List<Integer> getChildrenIndexes(int i){
+        ArrayList<Integer> childrenIndexes = new ArrayList<>();
+        int leftChildrenIndex = this.getLeftChildIndex(i);
+        if(leftChildrenIndex > this.size()-1){
+            return childrenIndexes;
+        }
+        if(null != this.get(leftChildrenIndex)){
+            childrenIndexes.add(leftChildrenIndex);
+        }
+
+        int rightChildrenIndex = this.getRightChildIndex(i);
+        if(rightChildrenIndex > this.size()-1){
+            return childrenIndexes;
+        }
+        if(null != this.get(rightChildrenIndex)){
+            childrenIndexes.add(rightChildrenIndex);
+        }
+        return childrenIndexes;
+    }
+
+    private String branchToString(int i) {
+        StringBuffer stringBuffer = new StringBuffer();
+        stringBuffer.append("\""+i+"\""+" [label="+this.get(i)+"]");
+        getChildrenIndexes(i).forEach(childIndex -> {
+            stringBuffer.append("\""+i+"\" -> \""+childIndex+"\";\n");
+        });
+        getChildrenIndexes(i).forEach(child -> {
+            stringBuffer.append(branchToString(child));
+        });
+        return stringBuffer.toString();
+    }
+}
