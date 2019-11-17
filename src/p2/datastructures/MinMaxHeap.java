@@ -1,16 +1,17 @@
 package p2.datastructures;
 
+import p2.interfaces.IMinMaxHeap;
+
 import java.util.ArrayList;
-import java.util.EmptyStackException;
 import java.util.List;
 
-public class MinMaxHeap<Key extends Comparable<? super Key>> {
+public class MinMaxHeap<Key extends Comparable<? super Key>> implements IMinMaxHeap {
 
     public Key[] pq;
     public int N = 0; // in pq [1..N] 0 wird nicht verwendet
 
     /***
-     * @source AD_2 Sortieren 2 Fol. 31
+     * source: AD_2 Sortieren 2 Fol. 31
      * @param maxN
      */
     public MinMaxHeap(int maxN) {
@@ -50,7 +51,7 @@ public class MinMaxHeap<Key extends Comparable<? super Key>> {
         return this.getGrandparentIndex(grandchild) == grandparent;
     }
 
-    private int getIndexOfLargestChildOrGrandChild(int index){
+    public int getIndexOfSmallestChildOrGrandChild(int index){
         int leftChildIndex = this.getLeftChildIndex(index);
         int rightChildIndex = this.getRightChildIndex(index);
         int leftChildLeftChildIndex = this.getLeftChildIndex(leftChildIndex);
@@ -77,7 +78,7 @@ public class MinMaxHeap<Key extends Comparable<? super Key>> {
         return currentMinIndex;
     }
 
-    private int getIndexOfSmallestChildOrGrandChild(int index) {
+    public int getIndexOfLargestChildOrGrandChild(int index) {
         int leftChildIndex = this.getLeftChildIndex(index);
         int rightChildIndex = this.getRightChildIndex(index);
         int leftChildLeftChildIndex = this.getLeftChildIndex(leftChildIndex);
@@ -113,15 +114,17 @@ public class MinMaxHeap<Key extends Comparable<? super Key>> {
     }
 
     private boolean hasChildren(int i) {
-        return (this.getLeftChildIndex(i) < N && this.getRightChildIndex(i) < N);
+        return (this.getLeftChildIndex(i) <= N );
     }
 
-    public Key getMin() {
+    @Override
+    public Key min() {
         return this.pq[1];
     }
 
+    @Override
     public int size() {
-        return this.pq.length;
+        return this.N;
     }
 
     public Key get(int i) {
@@ -132,7 +135,9 @@ public class MinMaxHeap<Key extends Comparable<? super Key>> {
         this.pq[i] = key;
     }
 
-    public Key getMax() {
+
+    @Override
+    public Key max() {
         return this.get(this.getMaxIndex());
     }
 
@@ -142,7 +147,7 @@ public class MinMaxHeap<Key extends Comparable<? super Key>> {
      */
     private int getMaxIndex() {
         if (this.size() == 0) {
-            throw new EmptyStackException();
+            return -1;
         }
 
         if (this.size() == 1) {
@@ -184,17 +189,18 @@ public class MinMaxHeap<Key extends Comparable<? super Key>> {
      * und mit dem Schlüssel Größe um 1 erhöhen
      * mit dem Schlüssel nach oben schwimmen
      * source: AD_2 Sortieren 2 Fol. 30
-     * @param v element which should be inserted
+     * @param k element which should be inserted
      */
-    public void insert(Key v) {
-        pq[++N] = v;
+    @Override
+    public void insert(Comparable k) {
+        pq[++N] = (Key) k;
         pushUp(N);
     }
 
 
     /***
      * source: https://en.wikipedia.org/wiki/Min-max_heap
-     * @param i
+     * @param i index of the element
      */
     private void pushUp(int i) {
         if (i != 1) {
@@ -217,7 +223,7 @@ public class MinMaxHeap<Key extends Comparable<? super Key>> {
     }
 
     /***
-     * @source https://en.wikipedia.org/wiki/Min-max_heap
+     * source: https://en.wikipedia.org/wiki/Min-max_heap
      * @param i
      */
     private void pushUpMin(int i) {
@@ -228,7 +234,7 @@ public class MinMaxHeap<Key extends Comparable<? super Key>> {
     }
 
     /***
-     * @source https://en.wikipedia.org/wiki/Min-max_heap
+     * source: https://en.wikipedia.org/wiki/Min-max_heap
      * @param i
      */
     private void pushUpMax(int i) {
@@ -240,43 +246,46 @@ public class MinMaxHeap<Key extends Comparable<? super Key>> {
 
     /***
      * delete the greatest element
+     * @return the value of the deleted element
      */
-    public void delMax() {
-        int index = getMaxIndex();
-        if (index == -1){
-            return ;
-        }
-        Key temp = pq[index];
-        N = N - 1;
-        pq[index] = pq[N];
-        pushDown(index);
-        //this.delete(this.getMaxIndex());
-    }
-
-    private boolean isLastIndex(int index) {
-        return index == N;
-    }
-
-    // https://stackoverflow.com/a/39392866
-    private void delete(int index) {
-        if (isLastIndex(index)) {
-            pq[N] = null;
-            N--;
-
-        } else {
-            int lastIndex = N;
-            System.out.println("last index: "+lastIndex);
-            System.out.println("last index value: "+this.get(lastIndex));
-            exch(index, lastIndex);
-            this.delete(lastIndex);
-            this.pushUp(index);
-            this.pushDown(index);
-            //this.floydBuildHeap();
-        }
+    @Override
+    public Key delMax() {
+        return this.delete(this.getMaxIndex());
     }
 
     /***
-     * @source https://en.wikipedia.org/wiki/Min-max_heap
+     * delete the smallest element
+     * @return the value of the deleted element
+     */
+    @Override
+    public Key delMin() {
+        return this.delete(1);
+    }
+
+    /***
+     * delete the element with the index index
+     * @param index of the element
+     * @return the value of the deleted element
+     */
+    private Key delete(int index){
+        Key deletedElement = this.get(index);
+        if (N == 1) {
+            pq[N] = null;
+            N--;
+            return deletedElement;
+        }
+        pq[index] = pq[N--];
+        pushDown(index);
+        return deletedElement;
+    }
+
+        private boolean isLastIndex(int index) {
+        return index == N;
+    }
+
+
+    /***
+     * source: https://en.wikipedia.org/wiki/Min-max_heap
      * @param index
      */
     private void pushDown(int index) {
@@ -288,8 +297,8 @@ public class MinMaxHeap<Key extends Comparable<? super Key>> {
     }
 
     /***
-     * @source https://en.wikipedia.org/wiki/Min-max_heap
-     * @param index
+     * source: https://en.wikipedia.org/wiki/Min-max_heap
+     * @param index of the element should be pushed down on a min level
      */
     private void pushDownMin(int index) {
         if (this.hasChildren(index)) {
@@ -310,7 +319,7 @@ public class MinMaxHeap<Key extends Comparable<? super Key>> {
     }
 
     /***
-     * @source https://en.wikipedia.org/wiki/Min-max_heap
+     * source: https://en.wikipedia.org/wiki/Min-max_heap
      * @param index
      */
     private void pushDownMax(int index) {
