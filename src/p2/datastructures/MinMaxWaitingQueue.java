@@ -9,17 +9,25 @@ public class MinMaxWaitingQueue {
     // vector to store heap elements
     private Vector<Integer> A;
 
-    // constructor: use default initial capacity of vector
+    /**
+     * constructor: use default initial capacity of vector
+     */
     public MinMaxWaitingQueue() {
         A = new Vector<>();
     }
 
-    // constructor: set custom initial capacity for vector
+    /**
+     * constructor: set custom initial capacity for vector
+     * @param capacity
+     */
     public MinMaxWaitingQueue(int capacity) {
         A = new Vector<>(capacity);
     }
 
-    // return parent of A.get(i)
+    /**
+     * @param i
+     * @return parent of A.get(i)
+     */
     private int parent(int i) {
         // if i is already a root node
         if (i == 0)
@@ -28,12 +36,19 @@ public class MinMaxWaitingQueue {
         return (i - 1) / 2;
     }
 
-    // return left child of A.get(i)
+    /**
+     * @param i
+     * @return left child of A.get(i)
+     */
     private int LEFT(int i) {
         return (2 * i + 1);
     }
 
-    // return right child of A.get(i)
+    /**
+     *
+     * @param i
+     * @return right child of A.get(i)
+     */
     private int RIGHT(int i) {
         return (2 * i + 2);
     }
