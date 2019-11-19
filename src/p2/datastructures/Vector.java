@@ -2,6 +2,7 @@ package p2.datastructures;
 
 //inspired by: https://docs.oracle.com/javase/7/docs/api/java/util/Vector.html
 
+import p2.interfaces.IDummyVector;
 import p2.util.MergeSort;
 import p2.util.VectorUtil;
 
@@ -10,7 +11,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.regex.Pattern;
 
-public class Vector implements Comparable<Vector> {
+public class Vector implements Comparable<Vector>, IDummyVector {
     private List<Integer> data;
     private static final Pattern PATTERN = Pattern.compile("[0-9]");
 
@@ -28,7 +29,9 @@ public class Vector implements Comparable<Vector> {
         this.data.addAll(c);
     }
 
-    //parses a String and creates a Vector of it
+    /**
+     * parses a String and creates a Vector of it
+     */
     public static Vector ofString(String vectorString){
         char[] vectorCharArray = vectorString.toCharArray();
         List<Integer> intList = new ArrayList<>();
@@ -48,14 +51,17 @@ public class Vector implements Comparable<Vector> {
         return new Vector(intList);
     }
 
+    @Override
     public int size(){
         return this.data.size();
     }
 
+    @Override
     public int get(int i){
         return this.data.get(i);
     }
 
+    @Override
     public List<Vector> nearestVectorsOfList(List<Vector> vectors, int nearestVectorsQuantity){
         if(nearestVectorsQuantity > vectors.size()){
             throw new IndexOutOfBoundsException();
@@ -73,6 +79,7 @@ public class Vector implements Comparable<Vector> {
         return returnList;
     }
 
+    @Override
     public List<Vector> nearestVectorsOfListOfFile(String pathToFile, int nearestVectorsQuantity){
         return this.nearestVectorsOfList(VectorUtil.generateVectorListOfFile(pathToFile), nearestVectorsQuantity);
     }

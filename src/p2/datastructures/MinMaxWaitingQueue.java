@@ -1,10 +1,12 @@
 package p2.datastructures;
 
+import p2.interfaces.IMinMaxWaitingQueue;
+
 import java.util.Vector;
 
 //https://en.wikipedia.org/wiki/Min-max_heap
 //https://www.techiedelight.com/min-heap-max-heap-implementation-in-java/
-public class MinMaxWaitingQueue {
+public class MinMaxWaitingQueue implements IMinMaxWaitingQueue {
 
     // vector to store heap elements
     private Vector<Integer> A;
@@ -22,6 +24,91 @@ public class MinMaxWaitingQueue {
      */
     public MinMaxWaitingQueue(int capacity) {
         A = new Vector<>(capacity);
+    }
+
+    @Override
+    public int size() {
+        return A.size();
+    }
+
+    @Override
+    public Boolean isEmpty() {
+        return A.isEmpty();
+    }
+
+    @Override
+    public void insert(Integer key) {
+        // insert the new element to the end of the vector
+        A.addElement(key);
+
+        // get element index and call heapify-up procedure
+        int index = size() - 1;
+        heapify_up(index);
+    }
+
+    @Override
+    public Integer delMax() {
+        try {
+            // if heap is empty, throw an exception
+            if (size() == 0) {
+                throw new Exception("Index is out of range (Heap underflow)");
+            }
+
+            // element with highest priority
+            int root = A.firstElement();    // or A.get(0);
+
+            // replace the root of the heap with the last element of the vector
+            A.setElementAt(A.lastElement(), 0);
+            A.remove(size() - 1);
+
+            // call heapify-down on root node
+            heapify_down(0);
+
+            // return root element
+            return root;
+        }
+        // catch and print the exception
+        catch (Exception ex) {
+            System.out.println(ex);
+            return null;
+        }
+    }
+
+    @Override
+    public Integer max() {
+        try {
+            // if heap has no elements, throw an exception
+            if (size() == 0) {
+                throw new Exception("Index out of range (Heap underflow)");
+            }
+
+            // else return the top (first) element
+            return A.firstElement();    // or A.get(0);
+        }
+        // catch the exception and print it, and return null
+        catch (Exception ex) {
+            System.out.println(ex);
+            return null;
+        }
+    }
+
+    @Override
+    public void clear() {
+        System.out.print("Emptying queue: ");
+        while (!A.isEmpty()) {
+            System.out.print(delMax() + " ");
+        }
+        System.out.println();
+    }
+
+    @Override
+    public Boolean contains(Integer i) {
+        return A.contains(i);
+    }
+
+    @Override
+    public Integer[] toArray() {
+        return A.toArray(new Integer[size()]);
     }
 
     /**
@@ -53,7 +140,12 @@ public class MinMaxWaitingQueue {
         return (2 * i + 2);
     }
 
-    // swap values at two indexes
+
+    /**
+     * swap values at two indexes
+     * @param x
+     * @param y
+     */
     void swap(int x, int y) {
         // swap with child having greater value
         Integer temp = A.get(x);
@@ -61,8 +153,11 @@ public class MinMaxWaitingQueue {
         A.setElementAt(temp, y);
     }
 
-    // Recursive Heapify-down procedure. Here the node at index i
-    // and its two direct children violates the heap property
+    /**
+     * Recursive Heapify-down procedure. Here the node at index i
+     * and its two direct children violates the heap property
+     * @param i
+     */
     private void heapify_down(int i) {
         // get left and right child of node at index i
         int left = LEFT(i);
@@ -89,7 +184,9 @@ public class MinMaxWaitingQueue {
         }
     }
 
-    // Recursive Heapify-up procedure
+    /**
+     * Recursive Heapify-up procedure
+     */
     private void heapify_up(int i) {
         // check if node at index i and its parent violates
         // the heap property
@@ -100,92 +197,5 @@ public class MinMaxWaitingQueue {
             // call Heapify-up on the parent
             heapify_up(parent(i));
         }
-    }
-
-    // return size of the heap
-    public int size() {
-        return A.size();
-    }
-
-    // check if heap is empty or not
-    public Boolean isEmpty() {
-        return A.isEmpty();
-    }
-
-    // insert specified key into the heap
-    public void insert(Integer key) {
-        // insert the new element to the end of the vector
-        A.addElement(key);
-
-        // get element index and call heapify-up procedure
-        int index = size() - 1;
-        heapify_up(index);
-    }
-
-    // function to remove and return element with highest priority
-    // (present at root). It returns null if queue is empty
-    public Integer delMax() {
-        try {
-            // if heap is empty, throw an exception
-            if (size() == 0) {
-                throw new Exception("Index is out of range (Heap underflow)");
-            }
-
-            // element with highest priority
-            int root = A.firstElement();    // or A.get(0);
-
-            // replace the root of the heap with the last element of the vector
-            A.setElementAt(A.lastElement(), 0);
-            A.remove(size() - 1);
-
-            // call heapify-down on root node
-            heapify_down(0);
-
-            // return root element
-            return root;
-        }
-        // catch and print the exception
-        catch (Exception ex) {
-            System.out.println(ex);
-            return null;
-        }
-    }
-
-    // function to return, but does not remove, element with highest priority
-    // (present at root). It returns null if queue is empty
-    public Integer max() {
-        try {
-            // if heap has no elements, throw an exception
-            if (size() == 0) {
-                throw new Exception("Index out of range (Heap underflow)");
-            }
-
-            // else return the top (first) element
-            return A.firstElement();    // or A.get(0);
-        }
-        // catch the exception and print it, and return null
-        catch (Exception ex) {
-            System.out.println(ex);
-            return null;
-        }
-    }
-
-    // function to remove all elements from priority queue
-    public void clear() {
-        System.out.print("Emptying queue: ");
-        while (!A.isEmpty()) {
-            System.out.print(delMax() + " ");
-        }
-        System.out.println();
-    }
-
-    // returns true if queue contains the specified element
-    public Boolean contains(Integer i) {
-        return A.contains(i);
-    }
-
-    // returns an array containing all elements in the queue
-    public Integer[] toArray() {
-        return A.toArray(new Integer[size()]);
     }
 }

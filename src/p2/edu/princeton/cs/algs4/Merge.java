@@ -10,7 +10,8 @@ package p2.edu.princeton.cs.algs4;
  *  Sorts a sequence of strings from standard input using mergesort.
  *
  *  % more tiny.txt
- *  S O R T E X A M P L E
+ *  S O R T E X A
+ *  M P L E
  *
  *  % java Merge < tiny.txt
  *  A E E L M O P R S T X                 [ one string per line ]
