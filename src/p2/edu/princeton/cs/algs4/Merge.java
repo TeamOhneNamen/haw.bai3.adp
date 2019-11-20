@@ -35,12 +35,14 @@ package p2.edu.princeton.cs.algs4;
  *  @author Robert Sedgewick
  *  @author Kevin Wayne
  */
+
+//TODO ArrayAccessCount + maximale komplexität 6 * N * log(N)/log(2)
 public class Merge {
 
     /**
      * @author Thorben
      */
-    private static int arrayAccessCount = 0;
+    public static int arrayAccessCount = 0;
 
     // This class should not be instantiated.
     private Merge() { }
@@ -53,18 +55,31 @@ public class Merge {
 
         // copy to aux[]
         for (int k = lo; k <= hi; k++) {
-            arrayAccessCount++;
+            arrayAccessCount=arrayAccessCount+2;
             aux[k] = a[k];
         }
 
         // merge back to a[]
         int i = lo, j = mid+1;
         for (int k = lo; k <= hi; k++) {
-            arrayAccessCount++;
-            if      (i > mid)              a[k] = aux[j++];
-            else if (j > hi)               a[k] = aux[i++];
-            else if (less(aux[j], aux[i])) a[k] = aux[j++];
-            else                           a[k] = aux[i++];
+            if(i > mid) {
+                arrayAccessCount=arrayAccessCount+2;
+                a[k] = aux[j++];
+            }
+            else if(j > hi) {
+                arrayAccessCount=arrayAccessCount+2;
+                a[k] = aux[i++];
+            }
+            else if (less(aux[j], aux[i])){
+                arrayAccessCount=arrayAccessCount+2;
+                arrayAccessCount=arrayAccessCount+2;
+                a[k] = aux[j++];
+            }
+            else{
+                arrayAccessCount=arrayAccessCount+2;
+                arrayAccessCount=arrayAccessCount+2;
+                a[k] = aux[i++];
+            }
         }
 
         // postcondition: a[lo .. hi] is sorted

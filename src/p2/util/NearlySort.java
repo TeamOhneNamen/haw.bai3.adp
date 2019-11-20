@@ -12,6 +12,7 @@ public class NearlySort {
 
         int index = 0;
 
+        //TODO: gehe über das 2*k window über die liste
         // do for remaining elements of the array
         for (int i = k + 1; i < list.size(); i++) {
             // pop top element from min-heap and assign it to
