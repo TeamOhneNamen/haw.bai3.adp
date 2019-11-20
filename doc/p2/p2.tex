@@ -2,12 +2,11 @@
 \usepackage{amssymb}
 \begin{document}
 \section*{2.2.1}
-Zu zeigen:
 $\sum\limits_{k=1}^n k^2 = \frac{n(n+1)(2n+1)}{6}$
 \paragraph{IA}
-Sei $n=1$ $1^2 = 1 = \frac{1(2)(3)}{6}=1$
+Sei $n=1$ $1^2 = 1 = \frac{1(2)(3)}{6}=1$ wahr
 \paragraph{IB}
-Sei N $\in \mathbb{N}$ beliebig aber fest und $\sum\limits_{k=1}^n k^2 = \frac{n(n+1)(2n+1)}{6}$ gilt
+Sei n $\in \mathbb{N}$ beliebig aber fest und $\sum\limits_{k=1}^n k^2 = \frac{n(n+1)(2n+1)}{6}$ gilt
 \paragraph{IS}
 zu zeigen $\sum\limits_{k=1}^{n+1} k^2 = \frac{(n+1)(n+2)(2n+3)}{6}$ \\
 $= \sum\limits_{k=1}^{n+1} k^2 = \sum\limits_{k=1}^{n} k^2 + (n+1)^2 = \frac{n(n+1)(2n+1)}{6}+(n+1)^2$ \\
@@ -15,6 +14,20 @@ $= \frac{n(n+1)(2n+1)+6(n+1)^2}{6} $ \textbar (n+1) raus \\
 $= \frac{n(n+1)((n(2n+1))+6(n+1))^2}{6} $ \\
 $= \frac{(n+1)(2n^2+n+6n+6)}{6} $ \\
 $= \frac{(n+1)(2n^2+7n+6)}{6} = \frac{(n+1)(n+2)(2n+3)}{6} $ \\
-q.e.d
+q.e.d.
+
 \section*{2.2.3}
+$\sum\limits_{i=0}^n (p+i) = \frac{(n+1)(2p+n)}{2}$
+\paragraph{IA}
+mit $ n = 0$ $(p+0) = \frac{(0+1)(2p+0)}{2} =  \frac{2p}{2}=2$ wahr
+\paragraph{IB}
+Sei n $\in \mathbb{N}$ beliebig aber fest und $\sum\limits_{i=0}^n (p+i) = \frac{(n+1)(2p+n)}{2}$ gilt
+\paragraph{IS}
+zu zeigen das n+1 gilt $\sum\limits_{i=0}^{n+1} (p+i) = \frac{(n+2)(2p+n+1)}{2}$ \\
+$\sum\limits_{i=0}^{n+1} (p+i) = \sum\limits_{i=0}^{n} (p+i)+(p+(n+1))$\\
+$\frac{(n+1)(2p+n)+2p+2n+2}{2}$\\
+$= \frac{n^2+2p+2pn+n+2p+2n+2}{2}$\\
+$= \frac{n^2+4p+2pn+n+3n+2}{2}$\\
+$= \frac{(n+2)(2p+n+1)}{2}$\\
+q.e.d.
 \end{document}
