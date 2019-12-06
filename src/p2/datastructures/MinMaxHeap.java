@@ -31,7 +31,10 @@ public class MinMaxHeap<Key extends Comparable<? super Key>> implements IMinMaxH
         }
     }
 
-    //TODO: ??????=?=?=?=?=?=?=?=?=?
+    /**
+     * @param i
+     * @return if the Index is on one of the Min Level
+     */
     private boolean isIndexMinLevel(int i) {
         return (Math.log(i) % 2) == 0;
     }

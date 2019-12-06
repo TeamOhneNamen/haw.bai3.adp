@@ -13,6 +13,12 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Stream;
 
 public class VectorUtil {
+
+    /**
+     * generating a vector from File
+     * @param pathToFile
+     * @return List of all Parsed Vectors of the File
+     */
     public static List<Vector> generateVectorListOfFile(String pathToFile){
         List<Vector> vectors = new ArrayList<>();
         try (Stream<String> stream = Files.lines(Paths.get(pathToFile))) {
@@ -23,6 +29,11 @@ public class VectorUtil {
         return vectors;
     }
 
+    /**
+     * writer for Vectors into a File
+     * @param vectors
+     * @param pathToFile
+     */
     public static void writeToFile(List<Vector> vectors, String pathToFile){
         String str = VectorUtil.vectorListToString(vectors);
 
@@ -34,6 +45,14 @@ public class VectorUtil {
         }
     }
 
+    /**
+     * make a List of Random Vertices withe the length of "listSize" the Vertices have to be between the "minValue" and the "maxValue"
+     * @param listSize
+     * @param vectorLength
+     * @param minValue
+     * @param maxValue
+     * @return List of Vertices
+     */
     public static List<Vector> generateVectorList(int listSize, int vectorLength, int minValue, int maxValue){
         List<Vector> vectorList = new ArrayList<>();
         for (int i = 0; i < listSize; i++) {
@@ -47,6 +66,11 @@ public class VectorUtil {
         return vectorList;
     }
 
+    /**
+     * Makes String from Vertices
+     * @param vectors
+     * @return String of vertices
+     */
     public static String vectorListToString(List<Vector> vectors){
         StringBuffer stringBuffer = new StringBuffer();
         vectors.forEach(element -> (stringBuffer).append(element.toString()).append("\n"));
