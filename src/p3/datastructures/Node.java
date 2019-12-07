@@ -1,6 +1,8 @@
 package p3.datastructures;
 
-public class Node<Key, Value> {
+import java.io.Serializable;
+
+public class Node<Key extends Comparable<? super Key>, Value> {
     public Key key;
     public Value value;
     public Node left;

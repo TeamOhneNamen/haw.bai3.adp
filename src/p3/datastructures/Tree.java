@@ -2,7 +2,7 @@ package p3.datastructures;
 
 import p3.interfaces.ITree;
 
-public class Tree<Key extends Comparable<? super Key>, Value> implements ITree<Key, Value> {
+public class Tree<Key extends Comparable<? super Key>, Value> implements ITree<Key, Value>  {
 
     public Node<Key, Value> root;
 
@@ -57,17 +57,14 @@ public class Tree<Key extends Comparable<? super Key>, Value> implements ITree<K
     public Value get(Key key){ return this.get(this.root,key); }
     private Value get(Node node, Key key ) {
         System.out.println(node.key);
-        if ( node.key.equals( key ) )
-        {
+        if ( node.key.equals( key ) )  {
             return (Value) node.value;
         }
 
-        if ( key.compareTo( (Key)node.key ) < 0 )
-        {
+        if ( key.compareTo( (Key)node.key ) < 0 ) {
             return node.left.value == null ? null : get(node.left,key);
         }
-        else
-        {
+        else {
             return node.right.value == null ? null : get(node.right,key);
         }
     }
@@ -88,8 +85,21 @@ public class Tree<Key extends Comparable<? super Key>, Value> implements ITree<K
         }
     }
 
+    /***
+     * https://en.wikipedia.org/wiki/Binary_search_tree#Verification
+     * @param minKey
+     * @param maxKey
+     * @return
+     */
     @Override
-    public boolean isOrdered(){
-        return false;
+    public boolean isOrdered(Key minKey, Key maxKey){
+        return this.isOrdered(this.root, minKey, maxKey);
+    }
+    private boolean isOrdered(Node node, Key minKey, Key maxKey){
+        if(null == node) return true;
+        if(node.key.compareTo(minKey) < 0 || node.key.compareTo(maxKey) > 0){
+            return false;
+        }
+        return isOrdered(node.left, minKey, (Key) node.key) && isOrdered(node.right, (Key) node.key, maxKey);
     }
 }
