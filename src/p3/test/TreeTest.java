@@ -8,10 +8,10 @@ import p3.datastructures.Tree;
 
 class TreeTest {
 
-    Tree<Character,Integer> padbergTree;
-    Tree<Integer,String> wikipediaTreeNotBST;
-    String padbergTreeString;
-    Node<Character, String> node_l_r_l_r_r;
+    private Tree<Character,Integer> padbergTree;
+    private Tree<Integer,String> wikipediaTreeNotBST;
+    private String padbergTreeString;
+    private Node<Character, String> node_l_r_l_r_r;
 
     @BeforeEach
     void SetUp() {
@@ -19,7 +19,7 @@ class TreeTest {
         prepareWikipedia();
     }
 
-    void preparePadbergTree() {
+    private void preparePadbergTree() {
         this.padbergTreeString = "0 S-5[1 E-5[2 A-10[NULL 3 C-11[NULL NULL]] 2 R-8[3 H-3[NULL 4 M-7[5 L-5[NULL NULL] 5 P-4[NULL NULL]]] NULL]] 1 X-0[NULL NULL]]";
         this.padbergTree = new Tree<>('S', 5);
         Node<Character, Integer> node_l = new Node<>('E', 5);
@@ -42,7 +42,7 @@ class TreeTest {
         node_l_r_l_r.insertRight(node_l_r_l_r_r);
     }
 
-    void prepareWikipedia() {
+    private void prepareWikipedia() {
         this.wikipediaTreeNotBST = new Tree<>(20, "Wurzel");
         this.wikipediaTreeNotBST.root.insertLeft(10,"Linkes Kind");
         Node<Integer,String> rechtes_kind = new Node<>(30, "Rechtes Kind");
@@ -74,9 +74,8 @@ class TreeTest {
     @Test
     void changeKeyTest(){
         Character key = 'Y';
-        System.out.println(this.padbergTree);
-        //this.padbergTree.changeKey(this.node_l_r_l_r_r.key, key);
-        System.out.println(this.padbergTree);
-        Assertions.assertEquals(this.node_l_r_l_r_r.value, this.padbergTree.get(key));
+        Assertions.assertTrue(this.padbergTree.isOrdered('A','Z'));
+        this.padbergTree.changeKey(this.node_l_r_l_r_r.key, key);
+        Assertions.assertFalse(this.padbergTree.isOrdered('A','Z'));
     }
 }

@@ -2,13 +2,14 @@ package p3.datastructures;
 
 import p3.interfaces.ITree;
 
+/***
+ * Implementation of the binary search tree
+ * @param <Key>
+ * @param <Value>
+ */
 public class Tree<Key extends Comparable<? super Key>, Value> implements ITree<Key, Value>  {
 
     public Node<Key, Value> root;
-
-    //0 S-5[1 E-5[2 A-10[NULL 3 C-11[NULL NULL]] 2 R-8[3 H-3[NULL 4 M-7[5 L-5[NULL NULL] 5 P-4[NULL NULL]]] NULL]] 1 X-0[NULL NULL]]
-    //Lies: Der Root hat die Ebene 0 mit Key S und Wert 5, einen linken Teilbaum der Ebene 1 mit Schlüssel E, Wert 5 usw.
-
     public Tree(Key key, Value value){
         this.root = new Node<>(key, value);
     }
@@ -17,46 +18,22 @@ public class Tree<Key extends Comparable<? super Key>, Value> implements ITree<K
     public String toString(){
         return nodeToString(0, this.root);
     }
-
     private String nodeToString(int level, Node node){
         if(null == node){
             return "NULL";
         }
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(level).append(" ");
-        stringBuilder.append(node.key.toString()).append("-");
-        stringBuilder.append(node.value.toString());
-        stringBuilder.append("[");
-        stringBuilder.append(nodeToString(level+1, node.left));
-        stringBuilder.append(" ");
-        stringBuilder.append(nodeToString(level+1, node.right));
-        stringBuilder.append("]");
-        return stringBuilder.toString();
-    }
-
-    public boolean contains(Key key){
-        return this.contains(this.root, key);
-    }
-
-    private boolean contains(Node node, Key key){
-        if(null != node){
-            System.out.print(key+" : ");
-            System.out.println(node.key);
-            if(node.key.equals(key)){
-                System.out.println("hello");
-                return true;
-            }else{
-                contains(node.left, key);
-                contains(node.right, key);
-            }
-        }
-
-        return false;
+        return String.valueOf(level) + " " +
+                node.key.toString() + "-" +
+                node.value.toString() +
+                "[" +
+                nodeToString(level + 1, node.left) +
+                " " +
+                nodeToString(level + 1, node.right) +
+                "]";
     }
 
     public Value get(Key key){ return this.get(this.root,key); }
     private Value get(Node node, Key key ) {
-        System.out.println(node.key);
         if ( node.key.equals( key ) )  {
             return (Value) node.value;
         }
@@ -69,27 +46,33 @@ public class Tree<Key extends Comparable<? super Key>, Value> implements ITree<K
         }
     }
 
+    /***
+     * replaces oldKey with newKey
+     * only works if the tree is in order
+     * @param oldKey key which should be replaced
+     * @param newKey key which replaces oldKey
+     * @throws NullPointerException if the tree is not ordered
+     */
     @Override
-    public void changeKey(Key old, Key newKey){
-        changeKey(this.root, old, newKey);
+    public void changeKey(Key oldKey, Key newKey){
+        changeKey(this.root, oldKey, newKey);
     }
-
-    private void changeKey(Node node, Key old, Key newKey){
+    private void changeKey(Node node, Key oldKey, Key newKey){
         if(null != node){
-            if(node.key.equals(old)){
+            if(node.key.equals(oldKey)){
                 node.key = newKey;
             }else{
-                changeKey(node.left, old, newKey);
-                changeKey(node.right, old, newKey);
+                changeKey(node.left, oldKey, newKey);
+                changeKey(node.right, oldKey, newKey);
             }
         }
     }
 
     /***
      * https://en.wikipedia.org/wiki/Binary_search_tree#Verification
-     * @param minKey
-     * @param maxKey
-     * @return
+     * @param minKey the minimal key in the binary search tree
+     * @param maxKey the maximal key in the binary search tree
+     * @return boolean if the tree is in the binary search tree order
      */
     @Override
     public boolean isOrdered(Key minKey, Key maxKey){
