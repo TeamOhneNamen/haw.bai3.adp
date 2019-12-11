@@ -10,6 +10,12 @@ import p3.interfaces.ITree;
 public class Tree<Key extends Comparable<? super Key>, Value> implements ITree<Key, Value>  {
 
     public Node<Key, Value> root;
+
+    /**
+     * Schreiben Sie einen Konstruktor, dem Sie einenBST übergeben, aus dem ein Treeerzeugt wird. Der Treesoll die BST Eigenschaft erfüllen.
+     * @param key
+     * @param value
+     */
     public Tree(Key key, Value value){
         this.root = new Node<>(key, value);
     }
@@ -33,6 +39,13 @@ public class Tree<Key extends Comparable<? super Key>, Value> implements ITree<K
     }
 
     public Value get(Key key){ return this.get(this.root,key); }
+
+    /**
+     * get value of the given key searched in the given Node
+     * @param node
+     * @param key
+     * @return value of the key
+     */
     private Value get(Node node, Key key ) {
         if ( node.key.equals( key ) )  {
             return (Value) node.value;

@@ -1,6 +1,5 @@
 package p3.datastructures;
 
-import java.sql.SQLOutput;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 
@@ -14,6 +13,9 @@ public class ArrayST<Key, Value> {
     private final int resizeStep = 10;
     private boolean sorted;
 
+    /**
+     * empty constructor
+     */
     public ArrayST(){
         int length = 10;
         this.sorted = false;
@@ -22,6 +24,11 @@ public class ArrayST<Key, Value> {
         this.values = (Value[]) new Object[this.maxLength];
     }
 
+    /**
+     * constructor with maxLength and a boolean to set if the list should be automaticly sorted on gets
+     * @param sorted
+     * @param maxLength
+     */
     public ArrayST(boolean sorted, int maxLength){
         this.sorted = sorted;
         this.maxLength = maxLength;
@@ -29,6 +36,16 @@ public class ArrayST<Key, Value> {
         this.values = (Value[]) new Object[this.maxLength];
     }
 
+    /**
+     * set a bunch of Keys and Values at the end of the ArrayST resize if the length is to small
+     * the first Key has to group up with the first value aso.
+     *
+     * ??? maby also sort if "accsess"
+     *
+     * @param keys
+     * @param values
+     * @throws RuntimeException if the keys list and the value list have not the same length
+     */
     public void set(Key[] keys, Value[] values){
         if(keys.length != values.length){
             throw new RuntimeException("keys and values should have the same length");
@@ -38,6 +55,14 @@ public class ArrayST<Key, Value> {
         }
     }
 
+    /**
+     * add a Key and Value Touple at the end of the ArrayST resize if the length is to small
+     *
+     * ??? maby also sort if "accsess"
+     *
+     * @param key
+     * @param value
+     */
     public void set(Key key, Value value){
         this.length++;
         if(this.length() == this.maxLength){ this.resize(); }
@@ -45,6 +70,11 @@ public class ArrayST<Key, Value> {
         this.values[this.length()-1] = value;
     }
 
+    /**
+     * get the element with the key 'key' and sort the ArrayST with the index of 'key'
+     * @param key
+     * @return
+     */
     public Value get(Key key){
         for (int index = 0; index < this.length(); index++) {
             if(this.keys[index].equals(key)){
@@ -55,6 +85,10 @@ public class ArrayST<Key, Value> {
         throw new NoSuchElementException("The there is no such Key: "+key.toString());
     }
 
+    /**
+     * sort the ArrayST in the way that the element in index "index" is on pos '0'
+     * @param index
+     */
     private void sort(int index){
         Key[] tempkeys = Arrays.copyOf(keys,keys.length);
         Value[] tempvalues = Arrays.copyOf(values,values.length);
@@ -64,6 +98,7 @@ public class ArrayST<Key, Value> {
 
         for (int i = 1; i < this.length(); i++) {
             //skip index
+            //now the j and i index are the same val
             if(j == index){ j++;}
             this.keys[i] = tempkeys[j];
             this.values[i] = tempvalues[j];
@@ -71,6 +106,10 @@ public class ArrayST<Key, Value> {
         }
     }
 
+    /**
+     * print the ArrayST
+     * @return
+     */
     @Override
     public String toString(){
         StringBuffer stringBuffer = new StringBuffer();
@@ -96,6 +135,10 @@ public class ArrayST<Key, Value> {
         this.values = Arrays.copyOf(this.values, this.maxLength+this.resizeStep);
     }
 
+    /**
+     * getter for the length
+     * @return
+     */
     public int length() {
         return this.length;
     }
