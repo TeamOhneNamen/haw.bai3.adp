@@ -3,6 +3,7 @@ package p3.test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import p3.datastructures.BST;
 import p3.datastructures.Node;
 import p3.datastructures.Tree;
 
@@ -12,6 +13,7 @@ class TreeTest {
     private Tree<Integer,String> wikipediaTreeNotBST;
     private String padbergTreeString;
     private Node<Character, String> node_l_r_l_r_r;
+    private BST<String, Integer> bst = new BST<String, Integer>();
 
     @BeforeEach
     void SetUp() {
@@ -20,6 +22,13 @@ class TreeTest {
     }
 
     private void preparePadbergTree() {
+        ////
+        String test = "S E A R C H E X A M P L E";
+        String[] keys = test.split(" ");
+        int n = keys.length;
+        for (int i = 0; i < n; i++)
+            bst.put(keys[i], i);
+        ////
         this.padbergTreeString = "0 S-5[1 E-5[2 A-10[NULL 3 C-11[NULL NULL]] 2 R-8[3 H-3[NULL 4 M-7[5 L-5[NULL NULL] 5 P-4[NULL NULL]]] NULL]] 1 X-0[NULL NULL]]";
         this.padbergTree = new Tree<>('S', 5);
         Node<Character, Integer> node_l = new Node<>('E', 5);
@@ -77,5 +86,11 @@ class TreeTest {
         Assertions.assertTrue(this.padbergTree.isOrdered('A','Z'));
         this.padbergTree.changeKey(this.node_l_r_l_r_r.key, key);
         Assertions.assertFalse(this.padbergTree.isOrdered('A','Z'));
+    }
+
+    @Test
+    void ofBSTTest(){
+        Tree tree = new Tree(this.bst);
+        Assertions.assertTrue(tree.isOrdered(bst.min(),bst.max()));
     }
 }

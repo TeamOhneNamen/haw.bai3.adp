@@ -44,4 +44,11 @@ public class ArraySTTest {
         this.emptySortedStringArrayST.get(this.keys[2]);
         Assertions.assertEquals("{drei : three}, {eins : one}, {zwei : two}",this.emptySortedStringArrayST.toString());
     }
+
+    @Test
+    void deleteTest(){
+        this.emptySortedStringArrayST.set(this.keys,this.values);
+        this.emptySortedStringArrayST.delete(this.keys[2]);
+        Assertions.assertEquals("{eins : one}, {zwei : two}",this.emptySortedStringArrayST.toString());
+    }
 }

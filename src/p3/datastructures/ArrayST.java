@@ -1,5 +1,6 @@
 package p3.datastructures;
 
+
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 
@@ -36,6 +37,10 @@ public class ArrayST<Key, Value> {
         this.values = (Value[]) new Object[this.maxLength];
     }
 
+    public void delKey(Key key) {
+        delete(key);
+    }
+
     /**
      * set a bunch of Keys and Values at the end of the ArrayST resize if the length is to small
      * the first Key has to group up with the first value aso.
@@ -64,10 +69,46 @@ public class ArrayST<Key, Value> {
      * @param value
      */
     public void set(Key key, Value value){
+        if(null == key) throw new RuntimeException("key should not be null");
+        if(null == value){
+            removeTheElement(key);
+        }
+        for (int i = 0; i < this.length(); i++) {
+            if(keys[i] == key){
+                values[i] = value;
+            }
+        }
         this.length++;
         if(this.length() == this.maxLength){ this.resize(); }
         this.keys[this.length()-1] = key;
         this.values[this.length()-1] = value;
+    }
+
+    public void delete(Key key){
+        this.set(key, null);
+    }
+
+    private void removeTheElement(Key key) {
+        Key[] tempKeys = (Key[]) new Object[keys.length-1];
+        Value[] tempValues = (Value[]) new Object[values.length-1];
+
+
+       // System.out.println(tempKeys.  );
+        for (int i = 0, k = 0; i < keys.length; i++) {
+
+            if (keys[i] == key) {
+                k++;
+            }
+            System.out.println(keys[k] + ":" + values[k]);
+            tempKeys[i] = keys[k];
+            tempValues[i] = values[k];
+
+
+            k++;
+        }
+        this.length--;
+        this.values = tempValues;
+        this.keys = tempKeys;
     }
 
     /**

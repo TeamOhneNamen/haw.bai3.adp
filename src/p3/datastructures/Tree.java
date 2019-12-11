@@ -13,11 +13,71 @@ public class Tree<Key extends Comparable<? super Key>, Value> implements ITree<K
 
     /**
      * Schreiben Sie einen Konstruktor, dem Sie einenBST übergeben, aus dem ein Treeerzeugt wird. Der Treesoll die BST Eigenschaft erfüllen.
-     * @param key
-     * @param value
      */
+    public Tree(BST bst){
+        bst.levelOrder().forEach(key -> this.put((Key)key, (Value) bst.get((Key)key)));
+    }
     public Tree(Key key, Value value){
         this.root = new Node<>(key, value);
+    }
+    private Tree(){ }
+
+
+    public void put(Key key, Value val) {
+        if (key == null) throw new IllegalArgumentException("calls put() with a null key");
+        if (val == null) {
+            delete(key);
+            return;
+        }
+        root = put(root, key, val);
+    }
+
+    private Node put(Node x, Key key, Value val) {
+        if (x == null) return new Node(key, val);
+        int cmp = key.compareTo((Key)x.key);
+        if      (cmp < 0) x.left  = put(x.left,  key, val);
+        else if (cmp > 0) x.right = put(x.right, key, val);
+        else              x.value   = val;
+        return x;
+    }
+
+    // return number of key-value pairs in BST rooted at x
+    private Value size(Node x) {
+        return (Value) x.value;
+    }
+
+
+    public void delete(Key key) {
+        if (key == null) throw new IllegalArgumentException("calls delete() with a null key");
+        this.root = delete(this.root, key);
+    }
+
+    private Node delete(Node x, Key key) {
+        if (x == null) return null;
+
+        int cmp = key.compareTo((Key)x.key);
+        if      (cmp < 0) x.left  = delete(x.left,  key);
+        else if (cmp > 0) x.right = delete(x.right, key);
+        else {
+            if (x.right == null) return x.left;
+            if (x.left  == null) return x.right;
+            Node t = x;
+            x = min(t.right);
+            x.right = deleteMin(t.right);
+            x.left = t.left;
+        }
+        return x;
+    }
+
+    private Node min(Node x) {
+        if (x.left == null) return x;
+        else                return min(x.left);
+    }
+
+    private Node deleteMin(Node x) {
+        if (x.left == null) return x.right;
+        x.left = deleteMin(x.left);
+        return x;
     }
 
     @Override
