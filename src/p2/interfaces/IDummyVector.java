@@ -27,7 +27,7 @@ public interface IDummyVector {
     List<Vector> nearestVectorsOfList(List<Vector> vectors, int nearestVectorsQuantity);
 
     /**
-     * 
+     *
      * @param pathToFile
      * @param nearestVectorsQuantity
      * @return
