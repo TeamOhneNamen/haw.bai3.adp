@@ -8,28 +8,40 @@ import java.util.*;
 public class DocumentSimilarity {
 
     private int numberOfFiles;
-    private TST<int[]> trigrammTree ;
+    private TST<int[]> trigramTree;
+    //Ein Trigramm ist eine Folge von 3 Zeichen
+    private final int WORD_LENGTH = 3;
+    // index of the last inserted document
+    private int documentIndex = 0;
 
     public DocumentSimilarity(String path){
-        trigrammTree = new TST<>();
+        trigramTree = new TST<>();
         numberOfFiles = Objects.requireNonNull(new File(path).listFiles()).length;
         fillTST(path);
     }
 
-    public List<String> getTrigramms(String word){
-        List<String> trigramms = new ArrayList<>();
-        if(word.length() < 3){
-            return trigramms;
+    /**
+     * bestimmen dann für jedes Wort die Trigramme
+     * @param word
+     * @return list of trigrams of the word
+     */
+    private List<String> createTrigrams(String word){
+        List<String> trigrams = new ArrayList<>();
+        if(word.length() < WORD_LENGTH){
+            return trigrams;
         }
-        trigramms.add(word.substring(0,3));
-        trigramms.addAll(getTrigramms(word.substring(1)));
-        return trigramms;
+        trigrams.add(word.substring(0,WORD_LENGTH));
+        trigrams.addAll(createTrigrams(word.substring(1)));
+        return trigrams;
     }
 
+    /**
+     * fills the TST with all file in the directory pathToFiles
+     * @param pathToFiles path of the files
+     */
     private void fillTST(String pathToFiles){
-        int documentIndex = 0;
         for(File file : new File(pathToFiles).listFiles()){
-            System.err.println("Dokument "+file.getName()+" hat nun Index "+documentIndex);
+            System.out.println(documentIndex+"\t"+file.getName());
             List<String> words = new ArrayList<>();
             try {
                 for(String line : Files.readAllLines(file.toPath())){
@@ -39,36 +51,50 @@ public class DocumentSimilarity {
                 e.printStackTrace();
             }
             for(String word: words){
-                List<String> trigramms = getTrigramms(word);
+                List<String> trigrams = createTrigrams(word);
                 int finalDocumentIndex = documentIndex;
-                trigramms.forEach(trigramm -> {
-                    if(!trigrammTree.contains(trigramm)){
-                        trigrammTree.put(trigramm,new int[numberOfFiles]);
+                trigrams.forEach(trigram -> {
+                    if(!trigramTree.contains(trigram)){
+                        //wählen Sie für den Wert in der Symboltabelle eine Liste der Länge der Anzahl der Dokumente
+                        // und initialisieren Sie alle Elemente der Liste mit 0
+                        trigramTree.put(trigram,new int[numberOfFiles]);
                     }
-                    trigrammTree.get(trigramm)[finalDocumentIndex]++;
+                    //Tragen Sie dann für einen Dokumenten-Index die Anzahl des Auftretens von Trigrammen korrekt ein.
+                    trigramTree.get(trigram)[finalDocumentIndex]++;
                 });
             }
             documentIndex++;
         }
     }
-    public void distanceForAllDocuments(){
+
+    /**
+     * prints the distances between all documents in the tst
+     */
+    private void distanceForAllDocuments(){
+        System.out.println("Doc\t|\tDoc\t|\tDis");
         for(int i = 0; i < numberOfFiles; i++){
             for (int j = i+1; j < numberOfFiles; j++){
-                System.out.println("Distanz zwischen Dokument "+i+" und "+j+" ist "+distanceBetweenDocuments(i,j));
+                System.out.println(i+"\t|\t"+j+"\t|\t"+ getDistance(i,j));
             }
         }
     }
 
-    public double distanceBetweenDocuments(int documentNumberA, int documentNumberB){
+    /**
+     *
+     * @param documentNumberA index of a document
+     * @param documentNumberB index of a document
+     * @return distance between documentNumberA and documentNumberB
+     */
+    private double getDistance(int documentNumberA, int documentNumberB){
         int distance = 0;
-        for(String trigramm : trigrammTree.keys()){
-            distance += Math.pow(trigrammTree.get(trigramm)[documentNumberA] - trigrammTree.get(trigramm)[documentNumberB],2);
+        for(String trigram : trigramTree.keys()){
+            distance += Math.pow(trigramTree.get(trigram)[documentNumberA] - trigramTree.get(trigram)[documentNumberB],2);
         }
         return Math.sqrt(distance);
     }
 
     public static void main(String[] args) {
-        DocumentSimilarity ds = new DocumentSimilarity("./testdocu/");
+        DocumentSimilarity ds = new DocumentSimilarity("./data/");
         ds.distanceForAllDocuments();
     }
 }
