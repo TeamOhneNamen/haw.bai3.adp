@@ -36,9 +36,11 @@
  *
  ******************************************************************************/
 
-package p4;
+package p4.DokumentÄhnlichkeit;
 
 import p3.datastructures.Queue;
+import p4.StdIn;
+import p4.StdOut;
 
 /**
  *  The {@code TST} class represents an symbol table of key-value
@@ -61,6 +63,11 @@ import p3.datastructures.Queue;
  *  <p>
  *  For additional documentation, see <a href="https://algs4.cs.princeton.edu/52trie">Section 5.2</a> of
  *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
+ *
+ *
+ *  https://algs4.cs.princeton.edu/52trie/TST.java.html
+ *
+ *
  */
 public class TST<Value> {
     private int n;              // size

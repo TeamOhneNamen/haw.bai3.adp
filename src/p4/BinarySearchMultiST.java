@@ -59,9 +59,11 @@ public class BinarySearchMultiST<Key extends Comparable<Key>, Value> {
             return values;
         }
 
+        //GET RANGE OF VALUES OF KEY
         int rankFirst = rankFirst(key);
         int rankLast = rankLast(key);
 
+        //add all values of key to queue between in the Range
         for (int index = rankFirst; index < rankLast; index++) {
             values.enqueue(this.values[index]);
         }

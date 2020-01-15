@@ -205,6 +205,13 @@ public class LinearProbingHashST<Key, Value> {
         return queue;
     }
 
+    public Iterable<Entry> getEntrys(){
+        Queue<Entry> queue = new Queue<Entry>();
+        for (int i = 0; i < m; i++)
+            if (keys[i] != null) queue.enqueue(new Entry(keys[i], vals[i]));
+        return queue;
+    }
+
     // integrity check - don't check after each put() because
     // integrity not maintained during a delete()
     private boolean check() {
